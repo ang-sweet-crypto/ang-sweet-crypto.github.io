@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RSA系列 on SWEET&#39;S BLOG</title>
+    <link>http://localhost:1331/series/rsa%E7%B3%BB%E5%88%97/</link>
+    <description>Recent content from SWEET&#39;S BLOG</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    
+    <managingEditor>1401617591@qq.com (sweet)</managingEditor>
+    <webMaster>1401617591@qq.com (sweet)</webMaster>
+    
+    <copyright>本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！</copyright>
+    
+    <lastBuildDate>Wed, 07 Jan 2026 23:00:00 +0800</lastBuildDate>
+    
+    
+    <atom:link href="http://localhost:1331/series/rsa%E7%B3%BB%E5%88%97/index.xml" rel="self" type="application/rss&#43;xml" />
+    
+
+    
+    
+
+    <item>
+      <title>RSA进阶：共模攻击（CTF真题解析）</title>
+      <link>http://localhost:1331/post/rsa%E8%BF%9B%E9%98%B6-%E5%85%B1%E6%A8%A1%E6%94%BB%E5%87%BB/</link>
+      <pubDate>Wed, 07 Jan 2026 23:00:00 &#43;0800</pubDate>
+      <author>1401617591@qq.com (sweet)</author>
+      <guid>http://localhost:1331/post/rsa%E8%BF%9B%E9%98%B6-%E5%85%B1%E6%A8%A1%E6%94%BB%E5%87%BB/</guid>
+      <description>
+        <![CDATA[<h1>RSA进阶：共模攻击（CTF真题解析）</h1><p>作者：sweet（1401617591@qq.com）</p>
+        
+          <h3 id="一题目背景">
+<a class="header-anchor" href="#%e4%b8%80%e9%a2%98%e7%9b%ae%e8%83%8c%e6%99%af"></a>
+一、题目背景
+</h3><p>CTF Crypto 真题：已知两个密文 $c_{1}, c_{2}$ 使用同一个模数 $n$，不同公钥 $e_{1}, e_{2}$ 加密同一明文 $m$，即：</p>
+$$
+\begin{aligned}
+c_{1} &\equiv m^{e_{1}} \pmod{n} \\
+c_{2} &\equiv m^{e_{2}} \pmod{n}
+\end{aligned}
+$$<p>且 $\gcd(e_{1}, e_{2}) = 1$，求明文 $m$。</p>
+<hr>
+<h3 id="二解题原理">
+<a class="header-anchor" href="#%e4%ba%8c%e8%a7%a3%e9%a2%98%e5%8e%9f%e7%90%86"></a>
+二、解题原理
+</h3><p>共模攻击的核心是利用扩展欧几里得算法求 $x, y$，使得：</p>
+$$
+e_{1}x + e_{2}y = 1
+$$<p>从而：</p>
+$$
+m \equiv c_{1}^{x} \cdot c_{2}^{y} \pmod{n}
+$$<p>若 $x$ 或 $y$ 为负数，则用模逆处理：</p>
+$$
+c^{-k} \equiv (c^{-1})^{k} \pmod{n}
+$$<hr>
+<h3 id="三代码实现python">
+<a class="header-anchor" href="#%e4%b8%89%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0python"></a>
+三、代码实现（Python）
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">mod_inverse</span>  <span class="c1"># pip install sympy</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 题目参数（示例）</span>
+</span></span><span class="line"><span class="cl"><span class="n">n</span>  <span class="o">=</span> <span class="mh">0x9599b8c5e9d7a8b6f5e4d3c2b1a0987654321</span>
+</span></span><span class="line"><span class="cl"><span class="n">e1</span> <span class="o">=</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl"><span class="n">e2</span> <span class="o">=</span> <span class="mi">5</span>
+</span></span><span class="line"><span class="cl"><span class="n">c1</span> <span class="o">=</span> <span class="mh">0x123456789abcdef</span>
+</span></span><span class="line"><span class="cl"><span class="n">c2</span> <span class="o">=</span> <span class="mh">0xfedcba987654321</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">extended_gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;返回 (g, x, y) 使得 a*x + b*y = g&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="n">g</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">extended_gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">g</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span> <span class="o">//</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">y1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">extended_gcd</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&#34;gcd(e1, e2) != 1，不满足共模攻击前提&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 处理负指数：a^{-k} mod n = (a^{-1})^k mod n</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">c1</span> <span class="o">=</span> <span class="n">mod_inverse</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">c2</span> <span class="o">=</span> <span class="n">mod_inverse</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">%</span> <span class="n">n</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;m (hex) =&#34;</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 稳定转 bytes（优先 pycryptodome 的 long_to_bytes）</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">from</span> <span class="nn">Crypto.Util.number</span> <span class="kn">import</span> <span class="n">long_to_bytes</span>  <span class="c1"># pip install pycryptodome</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pt</span> <span class="o">=</span> <span class="n">long_to_bytes</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pt</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">((</span><span class="n">m</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span> <span class="o">//</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&#34;big&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;m (bytes) =&#34;</span><span class="p">,</span> <span class="n">pt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;m (utf-8) =&#34;</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;m 不是标准 utf-8（可能有 padding/不是文本）&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+        
+        <hr><p>本文2026-01-07首发于<a href='http://localhost:1331/'>SWEET'S BLOG</a>，最后修改于2026-01-07</p>]]>
+      </description>
+      
+        <category>ctf-crypto</category>
+      
+    </item>
+    
+  </channel>
+</rss>

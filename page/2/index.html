@@ -441,27 +441,7 @@
       </div>
     </div>
   </div></div></div></aside>
-<section id="main" aria-label="Main content"><div class="post-categories-wrapper" data-aos="fade-up"><div class="post-categories-wrap">
-            <a class="post-link" href="/categories/ctf-crypto" aria-label="ctf-crypto" title="ctf-crypto"></a>
-            <div class="post-categories-cover"><img
-                  data-src="/images/reimu8.jpg"
-                  data-sizes="auto"
-                  alt="ctf-crypto"
-                  class="lazyload"
-                /><h2>ctf-crypto</h2>
-              <h3>8 篇文章</h3>
-            </div>
-          </div><div class="post-categories-wrap">
-            <a class="post-link" href="/categories/ctf-math" aria-label="ctf-math" title="ctf-math"></a>
-            <div class="post-categories-cover"><img
-                  data-src="/images/reimu11.jpg"
-                  data-sizes="auto"
-                  alt="ctf-math"
-                  class="lazyload"
-                /><h2>ctf-math</h2>
-              <h3>2 篇文章</h3>
-            </div>
-          </div></div><div class="post-wrapper">
+<section id="main" aria-label="Main content"><div class="post-wrapper">
   <div
     class="
       post-wrap left
@@ -469,16 +449,16 @@
     data-aos="fade-up"
   ><a
         class="post-link"
-        href="/post/%E8%AF%81%E4%B9%A6%E6%93%8D%E4%BD%9C/"
-        aria-label="OpenSSL玩转X.509证书🐾"
-        title="OpenSSL玩转X.509证书🐾"
+        href="/post/%E4%BF%A1%E5%AE%89%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
+        aria-label="信安数学基础学习与练习"
+        title="信安数学基础学习与练习"
       >
       </a><div
       class="
         post-cover left
       "
     ><img
-          data-src="/covers/reimu10.jpg"
+          data-src="/covers/reimu9.jpg"
           data-sizes="auto"
           alt=""
           class="lazyload"
@@ -487,109 +467,22 @@
       <div class="post-meta">
         <span
           ><span class="icon-calendar"></span
-          >2025-12-30</span
+          >2025-12-15</span
         ><span
           ><span class="icon-pencil"></span
-          >234 字</span
-        >
-        <span
-          ><span class="icon-clock"></span
-          >2 分钟</span
-        >
-      </div>
-      <h2 class="post-title">OpenSSL玩转X.509证书🐾</h2>
-      <article class="post-article">引言hello！欢迎回到咪猫魔法世界~ 🐾✨
-上篇文章中我们学习了DH协议的身份验证，可新问题来了：Bob怎么可信地获取Alice的公钥？如果中间人伪造公钥，之前的安全逻辑不就崩塌了？这时候X.509证书就该登场啦！
-本文主打一个“实操+踩坑实录”——精细拆解X.509证书格式、区分DER/PEM格式、用OpenSSL做证书解析/私钥解析/签名验证，同时夹杂为大家分享一些让我折腾良久的血泪踩坑经历，帮助大家更好的理解、掌握证书操作。
-一、X.509证书：让公钥“可信”的核心载体X.509是公钥基础设施（PKI）的数字证书标准，核心使命就是解决“公钥可信分发”——通过可信第三方（CA）的签 …</article>
-    </div>
-  </div>
-</div>
-<div class="post-wrapper">
-  <div
-    class="
-      post-wrap right
-    "
-    data-aos="fade-up"
-  ><a
-        class="post-link"
-        href="/post/%E7%BB%B4%E7%BA%B3%E6%94%BB%E5%87%BB/"
-        aria-label="维纳攻击(Wiener&#39;s Attack)🐾"
-        title="维纳攻击(Wiener&#39;s Attack)🐾"
-      >
-      </a><div
-      class="
-        post-cover right
-      "
-    ><img
-          data-src="/covers/reimu12.jpg"
-          data-sizes="auto"
-          alt=""
-          class="lazyload"
-        /></div>
-    <div class="post-info">
-      <div class="post-meta">
-        <span
-          ><span class="icon-calendar"></span
-          >2025-12-28</span
-        ><span
-          ><span class="icon-pencil"></span
-          >620 字</span
-        >
-        <span
-          ><span class="icon-clock"></span
-          >3 分钟</span
-        >
-      </div>
-      <h2 class="post-title">维纳攻击(Wiener&#39;s Attack)🐾</h2>
-      <article class="post-article">引言hello！欢迎回到咪猫魔法世界~ 🐾✨
-RSA的安全看似靠“大数分解”撑着，但如果私钥d选得太短，就会被维纳攻击轻松破解！本文专门拆解了维纳攻击的核心逻辑——用连分数逼近找到短小的d，不用分解n就能直接拿到私钥（cool），并在文末给出了完整代码和CTF例题，全程带着“踩坑实录”，帮新来的师傅们搞懂“为什么d短了就不安全”。
-我们之前已经了解过了 RSA 的各种攻击，而维纳攻击算是“剑走偏锋”的一种，核心依赖数论里的连分数工具，看似复杂，实则思路超清晰——不过如果我们能掌握“连分数+收敛子验证”，这类题也是能拿下的。
-一、前置知识：连分数——维纳攻击的核心工具维纳攻击的本质是“用连 …</article>
-    </div>
-  </div>
-</div>
-<div class="post-wrapper">
-  <div
-    class="
-      post-wrap left
-    "
-    data-aos="fade-up"
-  ><a
-        class="post-link"
-        href="/post/dh%E5%8D%8F%E8%AE%AE/"
-        aria-label="密钥交换的魔法：DH协议与STS协议🐾"
-        title="密钥交换的魔法：DH协议与STS协议🐾"
-      >
-      </a><div
-      class="
-        post-cover left
-      "
-    ><img
-          data-src="/covers/reimu2.jpg"
-          data-sizes="auto"
-          alt=""
-          class="lazyload"
-        /></div>
-    <div class="post-info">
-      <div class="post-meta">
-        <span
-          ><span class="icon-calendar"></span
-          >2025-12-25</span
-        ><span
-          ><span class="icon-pencil"></span
-          >657 字</span
+          >805 字</span
         >
         <span
           ><span class="icon-clock"></span
           >4 分钟</span
         >
       </div>
-      <h2 class="post-title">密钥交换的魔法：DH协议与STS协议🐾</h2>
-      <article class="post-article">引言hello！欢迎回到咪猫魔法世界~ 🐾✨
-在不安全的网络里，怎么安全交换只有双方知道的共享密钥？这就轮到DH协议登场啦！它能在被监听的信道上，让通信双方算出相同的密钥，却让窃听者无从下手——核心秘诀就是“离散对数难题”的魔力~o( =∩ω∩= )m～
-本文专门拆解DH协议的基础原理、中间人攻击的漏洞，以及简化STS协议的防护方案，还给出了可直接运行的Python代码，全程保持“边学边踩坑”的真实感，帮助各位新手师傅们搞懂密钥交换的核心逻辑！
-一、DH协议基础：不安全信道的密钥魔法DH协议（Diffie-Hellman协议）是密钥交换的经典方案，1976年由Whitfield …</article>
+      <h2 class="post-title">信安数学基础学习与练习</h2>
+      <article class="post-article">引言hello！欢迎来到咪猫魔法世界~ 🐾✨
+本篇内容参考了不少CSDN上的优质文章与笔记，我把核心知识点都提炼成了易懂的短句（可能略有偏差，但足够贴合初学理解）。其中包含具体示例、算法解析、构造方法的优质资料也都整合在文中啦，希望能给同样初学的师傅们一些帮助（若有理解上的偏差也希望师傅们及时指出！）~~o( =∩ω∩= )m
+一、信安数学基础学习1. 整除、欧几里得除法与素数基本定理整除：若a÷b=c无余数，则称b整除a（记为b∣a），商为c。
+关键性质：
+传递性：如12能被6整除、6能被3整除，则12必能被3整除； 线性组合：如6能整除12和18，则6也能整除 …</article>
     </div>
   </div>
 </div>
@@ -601,16 +494,16 @@ RSA的安全看似靠“大数分解”撑着，但如果私钥d选得太短，�
     data-aos="fade-up"
   ><a
         class="post-link"
-        href="/post/%E4%BA%8C%E6%AC%A1%E5%89%A9%E4%BD%99%E4%B8%8E%E5%8B%92%E8%AE%A9%E5%BE%B7%E7%AC%A6%E5%8F%B7/"
-        aria-label="二次剩余与勒让德符号🐾"
-        title="二次剩余与勒让德符号🐾"
+        href="/post/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%B8%8E%E6%96%87%E4%BB%B6%E9%9A%90%E5%86%99%E5%9F%BA%E7%A1%80/"
+        aria-label="哈希算法与文件隐写基础"
+        title="哈希算法与文件隐写基础"
       >
       </a><div
       class="
         post-cover right
       "
     ><img
-          data-src="/covers/reimu5.jpg"
+          data-src="/covers/reimu7.jpg"
           data-sizes="auto"
           alt=""
           class="lazyload"
@@ -619,21 +512,20 @@ RSA的安全看似靠“大数分解”撑着，但如果私钥d选得太短，�
       <div class="post-meta">
         <span
           ><span class="icon-calendar"></span
-          >2025-12-22</span
+          >2025-12-08</span
         ><span
           ><span class="icon-pencil"></span
-          >276 字</span
+          >327 字</span
         >
         <span
           ><span class="icon-clock"></span
           >2 分钟</span
         >
       </div>
-      <h2 class="post-title">二次剩余与勒让德符号🐾</h2>
-      <article class="post-article">引言hello！欢迎回到咪猫魔法世界~ 🐾✨
-信安人绕不开的“数论坎”来啦！前面学完一次同余方程，本以为可以顺风顺水，结果碰到二次同余直接懵圈——怎么一次到二次，解法复杂度直接翻倍啊？！
-这篇blog是上一篇《信安数学基础学习与练习》的专项补强，专门拆解二次同余方程、二次剩余、勒让德符号这些“拦路虎”，还会和一次同余做详细对比，帮大家理清逻辑。全程保持真实踩坑感，毕竟“懂（不）了”才是学习数论的常态嘛！
-一、二次同余方程：从一次到二次解法的“蜕变”一次同余方程靠扩展欧几里得就能直接冲，可二次同余完全不一样！核心逻辑是“拆解+合并”，先把复杂模数拆成简单素数幂，解完再用中国剩余定理合并，一 …</article>
+      <h2 class="post-title">哈希算法与文件隐写基础</h2>
+      <article class="post-article">引言hello！欢迎来到咪猫魔法世界~ 🐾✨
+在 CTF 的 Crypto/Misc 里，哈希像“给数据按下的指纹印章”：你拿着印章（算法）一盖，谁来都能复现同一个指纹；而文件隐写更像“把小纸条塞进字节夹层里”——文件表面看着正常，里面却藏着另一份故事。 这两类题的共同点是：不靠玄学，靠流程。你只要会“看懂它是什么、再决定怎么下手”，分数就会自己跑过来（O.o）✨
+一、关于哈希 / 加密 / 编码很多新手🐱栽的第一个坑，就是把这三者混成一锅粥（比如我曾经就在做ER图的时候写了这样一个词：“加密后的密文”，当时我们项目指导老师笑的嘴角就没压下来过555）。那么我们现在一起来理理这三者之间的 …</article>
     </div>
   </div>
 </div>
@@ -645,16 +537,16 @@ RSA的安全看似靠“大数分解”撑着，但如果私钥d选得太短，�
     data-aos="fade-up"
   ><a
         class="post-link"
-        href="/post/rsa%E5%9F%BA%E7%A1%80%E9%A2%98%E8%A7%A3/"
-        aria-label="RSA基础与大数分解（含多种类型exp）🐾"
-        title="RSA基础与大数分解（含多种类型exp）🐾"
+        href="/post/%E7%BC%96%E7%A0%81%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%E8%A7%A3%E5%AF%86/"
+        aria-label="CyberChef：编码基础与可视化解密"
+        title="CyberChef：编码基础与可视化解密"
       >
       </a><div
       class="
         post-cover left
       "
     ><img
-          data-src="/covers/reimu3.jpg"
+          data-src="/covers/reimu4.jpg"
           data-sizes="auto"
           alt=""
           class="lazyload"
@@ -663,26 +555,114 @@ RSA的安全看似靠“大数分解”撑着，但如果私钥d选得太短，�
       <div class="post-meta">
         <span
           ><span class="icon-calendar"></span
-          >2025-12-21</span
+          >2025-12-04</span
         ><span
           ><span class="icon-pencil"></span
-          >1085 字</span
+          >236 字</span
         >
         <span
           ><span class="icon-clock"></span
-          >6 分钟</span
+          >2 分钟</span
         >
       </div>
-      <h2 class="post-title">RSA基础与大数分解（含多种类型exp）🐾</h2>
-      <article class="post-article">引言hello！欢迎回到咪猫魔法世界~ 🐾✨
-前面啃完数论基础和CryptoHack入门题，这篇聚焦RSA核心——它是1977年由Ron Rivest、Adi Shamir和Leonard Adleman提出的非对称加密算法，本质是数论知识点（欧拉函数、模逆元、大质数判断）的拼接。另外我在这篇文章中还对 RSA安全基石、更多CTF攻击类型、实际应用场景和实战工具等进行了整合，让大家通过这一篇文章就能够大概了解多种 RSA 的“原理+实战+拓展”实际应用~
-一、RSA加密算法基础1.1 核心定义与安全基石RSA是非对称加密算法的经典代表，加密和解密使用不同密钥，安全性完全建立在“大数分解 …</article>
+      <h2 class="post-title">CyberChef：编码基础与可视化解密</h2>
+      <article class="post-article">引言hello! 欢迎来到咪猫魔法世界 🐾
+在 CTF Crypto 里，编码是“字节与人类语言之间的通用咒语”：所有明文、密文最终都会以字节（bytes）形式存储与传输。理解编码的标准化规则，就能更快拆解题目外层的数据伪装。 而 CyberChef 是咪猫的炼金台：拖拽模块、实时出结果，非常适合用来验证你对“这层到底是不是编码”的判断。
+一、编码 vs 加密编码和加密经常被新手混淆，但它们的目标完全不同。编码遵循公开的标准规则，解决的是数据表示与传输问题，所以本身不提供保密性；加密依赖密钥进行变换，核心是隐藏内容，没有密钥就难以合法还原。
+类型 核心特征 关键区别 编码 …</article>
     </div>
   </div>
 </div>
-<nav id="page-nav" aria-label="Pagination navigation" data-aos="fade-up"><span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">
-      下一页 &raquo;
-    </a></nav>
+<div class="post-wrapper">
+  <div
+    class="
+      post-wrap right
+    "
+    data-aos="fade-up"
+  ><a
+        class="post-link"
+        href="/post/%E5%8F%A4%E5%85%B8%E5%AF%86%E7%A0%81%E7%9A%84%E6%8E%A2%E7%B4%A2/"
+        aria-label="古典密码学入门：置换与替换的核心逻辑"
+        title="古典密码学入门：置换与替换的核心逻辑"
+      >
+      </a><div
+      class="
+        post-cover right
+      "
+    ><img
+          data-src="/covers/reimu6.jpg"
+          data-sizes="auto"
+          alt=""
+          class="lazyload"
+        /></div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span
+          ><span class="icon-calendar"></span
+          >2025-12-02</span
+        ><span
+          ><span class="icon-pencil"></span
+          >661 字</span
+        >
+        <span
+          ><span class="icon-clock"></span
+          >4 分钟</span
+        >
+      </div>
+      <h2 class="post-title">古典密码学入门：置换与替换的核心逻辑</h2>
+      <article class="post-article">引言hello!欢迎来到咪猫魔法世界~
+古典密码作为密码学的启蒙积木，虽无现代密码的数学复杂度，却浓缩了置换与替换两大核心思想——这也是现代分组密码、流密码的底层雏形。
+在CTF场景中，古典密码常以送分题形式出现，但极易因细节（大小写、字符过滤、密钥格式）翻车。本文将从密码学定义、算法原理、CTF实战解法、工程实现到常见陷阱，全维度拆解栅栏、凯撒、维吉尼亚三类经典古典密码，同时对比Python与C语言实现的工程差异，为后续学习现代密码学筑牢基础。
+一、古典密码的核心分类与设计原则古典密码的本质是对明文的字符或比特进行可逆变换，核心分为两类（符合Kerckhoffs原则：密码系统的安全性仅 …</article>
+    </div>
+  </div>
+</div>
+<div class="post-wrapper">
+  <div
+    class="
+      post-wrap left
+    "
+    data-aos="fade-up"
+  ><a
+        class="post-link"
+        href="/post/crypto%E5%85%A5%E9%97%A8--%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/"
+        aria-label="Crypto入门-基于Windows操作系统的环境配置"
+        title="Crypto入门-基于Windows操作系统的环境配置"
+      >
+      </a><div
+      class="
+        post-cover left
+      "
+    ><img
+          data-src="/covers/reimu1.jpg"
+          data-sizes="auto"
+          alt=""
+          class="lazyload"
+        /></div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span
+          ><span class="icon-calendar"></span
+          >2025-11-30</span
+        ><span
+          ><span class="icon-pencil"></span
+          >704 字</span
+        >
+        <span
+          ><span class="icon-clock"></span
+          >4 分钟</span
+        >
+      </div>
+      <h2 class="post-title">Crypto入门-基于Windows操作系统的环境配置</h2>
+      <article class="post-article">引言hello!欢迎来到咪喵魔法世界~
+抱着对crypto的强烈好奇与浓烈兴趣，我加入了这个神秘的魔法组织。有句话是这么说的，“当新鲜感褪去，真正的爱才开始浮现”。学习crypto的第四个月，我对这句话的赞同度只增不减。
+不得不承认，crypto的学习也许不像第一眼看上去那样“炫酷”，它没有web“改个请求参数就能弹出 flag”的即时快乐；也没有二进制“调通断点让程序跑通”的爽感，学crypto的枯燥是越往深处走越磨人的“顿感枯燥”——不是基础RSA算逆元的机械，是分析复现 Coppersmith 算法攻击时对着 “短私钥多项式构造” 的论文啃一下午，连变量替换的逻辑都没摸透的头昏脑涨； …</article>
+    </div>
+  </div>
+</div>
+<nav id="page-nav" aria-label="Pagination navigation" data-aos="fade-up"><a class="extend prev" rel="prev" href="/">
+      &laquo;
+      上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span></nav>
 </section>
         </div><footer id="footer" aria-label="Site footer">
   <div style="width: 100%; overflow: hidden">

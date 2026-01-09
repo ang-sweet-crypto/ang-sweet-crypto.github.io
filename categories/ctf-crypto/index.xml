@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>SWEET&#39;S BLOG</title>
-    <link>http://localhost:1336/</link>
+    <title>Ctf-Crypto on SWEET&#39;S BLOG</title>
+    <link>http://localhost:1336/categories/ctf-crypto/</link>
     <description>Recent content from SWEET&#39;S BLOG</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
@@ -15,7 +15,7 @@
     <lastBuildDate>Tue, 30 Dec 2025 14:30:00 +0800</lastBuildDate>
     
     
-    <atom:link href="http://localhost:1336/index.xml" rel="self" type="application/rss&#43;xml" />
+    <atom:link href="http://localhost:1336/categories/ctf-crypto/index.xml" rel="self" type="application/rss&#43;xml" />
     
 
     
@@ -357,96 +357,6 @@ x = a_0 + \frac{1}{a_1 + \frac{1}{a_2 + \frac{1}{a_3 + \ddots}}}
     
 
     <item>
-      <title>二次剩余与勒让德符号🐾</title>
-      <link>http://localhost:1336/post/%E4%BA%8C%E6%AC%A1%E5%89%A9%E4%BD%99%E4%B8%8E%E5%8B%92%E8%AE%A9%E5%BE%B7%E7%AC%A6%E5%8F%B7/</link>
-      <pubDate>Mon, 22 Dec 2025 15:30:00 &#43;0800</pubDate>
-      <author>1401617591@qq.com (sweet)</author>
-      <guid>http://localhost:1336/post/%E4%BA%8C%E6%AC%A1%E5%89%A9%E4%BD%99%E4%B8%8E%E5%8B%92%E8%AE%A9%E5%BE%B7%E7%AC%A6%E5%8F%B7/</guid>
-      <description>
-        <![CDATA[<h1>二次剩余与勒让德符号🐾</h1><p>作者：sweet（1401617591@qq.com）</p>
-        
-          <h2 id="引言">
-<a class="header-anchor" href="#%e5%bc%95%e8%a8%80"></a>
-引言
-</h2><p>hello！欢迎回到咪猫魔法世界~ 🐾✨</p>
-<p>信安人绕不开的“数论坎”来啦！前面学完一次同余方程，本以为可以顺风顺水，结果碰到二次同余直接懵圈——怎么一次到二次，解法复杂度直接翻倍啊？！</p>
-<p>这篇blog是上一篇《信安数学基础学习与练习》的专项补强，专门拆解二次同余方程、二次剩余、勒让德符号这些“拦路虎”，还会和一次同余做详细对比，帮大家理清逻辑。全程保持真实踩坑感，毕竟“懂（不）了”才是学习数论的常态嘛！</p>
-<hr>
-<h2 id="一二次同余方程从一次到二次解法的蜕变">
-<a class="header-anchor" href="#%e4%b8%80%e4%ba%8c%e6%ac%a1%e5%90%8c%e4%bd%99%e6%96%b9%e7%a8%8b%e4%bb%8e%e4%b8%80%e6%ac%a1%e5%88%b0%e4%ba%8c%e6%ac%a1%e8%a7%a3%e6%b3%95%e7%9a%84%e8%9c%95%e5%8f%98"></a>
-一、二次同余方程：从一次到二次解法的“蜕变”
-</h2><blockquote>
-<p>一次同余方程靠扩展欧几里得就能直接冲，可二次同余完全不一样！核心逻辑是“拆解+合并”，先把复杂模数拆成简单素数幂，解完再用中国剩余定理合并，一步都不能省。</p>
-</blockquote>
-<h3 id="11-二次同余方程核心原理">
-<a class="header-anchor" href="#11-%e4%ba%8c%e6%ac%a1%e5%90%8c%e4%bd%99%e6%96%b9%e7%a8%8b%e6%a0%b8%e5%bf%83%e5%8e%9f%e7%90%86"></a>
-1.1 二次同余方程核心原理
-</h3><p>二次同余方程的一般形式是 \(ax^2 + bx + c \equiv 0 \pmod{m}\)，最简形式是 \(x^2 \equiv a \pmod{m}\)（a、m为整数，\(m>0\)）。</p>
-<p>核心思路就两步：</p>
-<ol>
-<li>模数分解：根据“素数幂分解定理”，把m拆成 \(m = p_1^{k_1} \times p_2^{k_2} \times ... \times p_n^{k_n}\)（\(p_i\) 是素数）；</li>
-<li>合并解：原方程等价于“模每个素数幂 \(p_i^{k_i}\) 的同余方程组”，解完每个方程组后，用中国剩余定理合并出最终解。</li>
-</ol>
-<blockquote>
-<p>Q: 为啥要这么拆？
-A: 直接解模合数m的方程太难了！素数幂的方程更简单，拆解后难度直接降级🐱</p>
-</blockquote>
-<h3 id="12-一次-vs-二次同余方程">
-<a class="header-anchor" href="#12-%e4%b8%80%e6%ac%a1-vs-%e4%ba%8c%e6%ac%a1%e5%90%8c%e4%bd%99%e6%96%b9%e7%a8%8b"></a>
-1.2 一次 vs 二次同余方程
-</h3><p>为了避免混淆，我把两者的关键差异整理成了表格，一目了然：</p>
-<table>
-  <thead>
-      <tr>
-          <th>对比维度</th>
-          <th>一次同余方程</th>
-          <th>二次同余方程</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>方程形式</td>
-          <td>\(ax \equiv b \pmod{m}\)（a、m为整数，\(m>0\)）</td>
-          <td>一般形式：\(ax^2 + bx + c \equiv 0 \pmod{m}\)；最简形式：\(x^2 \equiv a \pmod{m}\)</td>
-      </tr>
-      <tr>
-          <td>解的存在性判断</td>
-          <td>简单！计算\(\gcd(a,m)\)，若能整除b则有解</td>
-          <td>复杂！先拆m为素数幂，再用勒让德符号/欧拉判别法判断每个素数幂下是否有解，最后看所有方程组是否都有解</td>
-      </tr>
-      <tr>
-          <td>核心解法工具</td>
-          <td>1. 扩展欧几里得算法（求特解）；2. 中国剩余定理（合并解）</td>
-          <td>1. 勒让德/雅可比符号（判断可解性）；2. 亨泽尔引理（提升素数解到素数幂解）；3. Tonelli-Shanks算法（求素数模下的解）；4. 中国剩余定理（合并解）</td>
-      </tr>
-      <tr>
-          <td>解的数量与结构</td>
-          <td>若有解，设\(d=\gcd(a,m)\)，则模m下有d个不同解；解的结构：\(x \equiv x_0 + k \times m/d \pmod{m}\)（\(k=0,1,...,d-1\)），规律明确</td>
-          <td>模素数p（\(p \nmid a\)）：有解则通常2个解；\(x^2 \equiv 0 \pmod{p}\) 仅有1个解\(x \equiv 0\)；模素数幂\(p^k\)：解数可能为0、1或2；模合数m：解数是各素数幂解数的乘积，无统一规律</td>
-      </tr>
-      <tr>
-          <td>复杂度与应用</td>
-          <td>复杂度低，直接用于RSA求模逆元等场景</td>
-          <td>复杂度高，依赖大数分解；二次剩余的判断困难性是Goldwasser-Micali概率加密的安全基础，求解算法（如Tonelli-Shanks）用于椭圆曲线密码</td>
-      </tr>
-  </tbody>
-</table>
-<hr>
-<h2 id="二二次剩余平方同余有解的专属名字">
-<a class="header-anchor" href="#%e4%ba%8c%e4%ba%8c%e6%ac%a1%e5%89%a9%e4%bd%99%e5%b9%b3%e6%96%b9%e5%90%8c%e4%bd%99%e6%9c%89%e8%a7%a3%e7%9a%84%e4%b8%93%e5%b1%9e%e5%90%8d%e5%ad%97"></a>
-二、二次剩余：平方同余有解的“专属名字”
-</h2><p>搞懂二次同余，核心就是搞懂“二次剩余”——本质就是判断“\(x^2 \equiv a \pmod{p}\) 有没有解”</p>
-        
-        <hr><p>本文2025-12-22首发于<a href='http://localhost:1336/'>SWEET'S BLOG</a>，最后修改于2025-12-22</p>]]>
-      </description>
-      
-        <category>ctf-math</category>
-      
-    </item>
-    
-    
-
-    <item>
       <title>RSA基础与大数分解（含多种类型exp）🐾</title>
       <link>http://localhost:1336/post/rsa%E5%9F%BA%E7%A1%80%E9%A2%98%E8%A7%A3/</link>
       <pubDate>Sun, 21 Dec 2025 14:00:00 &#43;0800</pubDate>
@@ -516,124 +426,6 @@ A: 直接解模合数m的方程太难了！素数幂的方程更简单，拆解�
       </description>
       
         <category>ctf-crypto</category>
-      
-    </item>
-    
-    
-
-    <item>
-      <title>信安数学基础学习与练习</title>
-      <link>http://localhost:1336/post/%E4%BF%A1%E5%AE%89%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</link>
-      <pubDate>Mon, 15 Dec 2025 14:00:00 &#43;0800</pubDate>
-      <author>1401617591@qq.com (sweet)</author>
-      <guid>http://localhost:1336/post/%E4%BF%A1%E5%AE%89%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</guid>
-      <description>
-        <![CDATA[<h1>信安数学基础学习与练习</h1><p>作者：sweet（1401617591@qq.com）</p>
-        
-          <h2 id="引言">
-<a class="header-anchor" href="#%e5%bc%95%e8%a8%80"></a>
-引言
-</h2><p>hello！欢迎来到咪猫魔法世界~ 🐾✨</p>
-<p>本篇内容参考了不少CSDN上的优质文章与笔记，我把核心知识点都提炼成了易懂的短句（可能略有偏差，但足够贴合初学理解）。其中包含具体示例、算法解析、构造方法的优质资料也都整合在文中啦，希望能给同样初学的师傅们一些帮助（若有理解上的偏差也希望师傅们及时指出！）~~o( =∩ω∩= )m</p>
-<hr>
-<h2 id="一信安数学基础学习">
-<a class="header-anchor" href="#%e4%b8%80%e4%bf%a1%e5%ae%89%e6%95%b0%e5%ad%a6%e5%9f%ba%e7%a1%80%e5%ad%a6%e4%b9%a0"></a>
-一、信安数学基础学习
-</h2><h3 id="1-整除欧几里得除法与素数基本定理">
-<a class="header-anchor" href="#1-%e6%95%b4%e9%99%a4%e6%ac%a7%e5%87%a0%e9%87%8c%e5%be%97%e9%99%a4%e6%b3%95%e4%b8%8e%e7%b4%a0%e6%95%b0%e5%9f%ba%e6%9c%ac%e5%ae%9a%e7%90%86"></a>
-1. 整除、欧几里得除法与素数基本定理
-</h3><ul>
-<li>
-<p><strong>整除</strong>：若a÷b=c无余数，则称b整除a（记为b∣a），商为c。</p>
-</li>
-<li>
-<p>关键性质：</p>
-<ul>
-<li>传递性：如12能被6整除、6能被3整除，则12必能被3整除；</li>
-<li>线性组合：如6能整除12和18，则6也能整除12×2+18×3=78（倍数的线性组合仍为倍数）。</li>
-</ul>
-</li>
-<li>
-<p><strong>欧几里得除法（带余除法）</strong>：a÷b=c余d（0&lt;d&lt;b），其中c和d是唯一确定的。</p>
-</li>
-<li>
-<p>核心作用：是求最大公约数、解同余方程的基础，先固定除法的“商余关系”。</p>
-</li>
-<li>
-<p><strong>最大公约数(gcd)与欧几里得算法(辗转相除法)</strong>：</p>
-<ul>
-<li>
-<p>gcd定义：能同时整除a和b的最大整数，如gcd(198,252)=18；</p>
-</li>
-<li>
-<p>特殊情况：若gcd(a,b)=1，则a和b互素（如4和5，仅1能同时整除）；</p>
-</li>
-<li>
-<p>欧几里得算法：大数÷小数得余数，再用原除数÷余数，重复至余数为0，最后一个非零余数即为gcd；</p>
-</li>
-<li>
-<p>示例：计算gcd(252,198)</p>
-<p>①252÷198=1余54；</p>
-<p>②198÷54=3余36；</p>
-<p>③54÷36=1余18；</p>
-<p>④36÷18=2余0</p>
-<p>→ 最终gcd=18。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>扩展欧几里得算法</strong>：</p>
-<ul>
-<li>核心能力：除求gcd(a,b)外，还能找到整数x、y满足a×x + b×y = gcd(a,b)；</li>
-<li>计算方法：回代法——先通过欧几里得算法求gcd，再从最后一步反向回代，推导出满足等式的x、y；</li>
-<li>注意点：若x为负数，需累加模数至x为正；</li>
-<li>核心应用：求模逆元——若a和m互素（gcd(a,m)=1），可找到x使a×x ≡1 mod m（x即为a的逆元，如2×3=6≡1 mod5，3是2的逆元），是密码学解密的关键。</li>
-</ul>
-</li>
-<li>
-<p><strong>素数基本定理</strong>：</p>
-<ul>
-<li>核心结论：当x→∞时，不大于x的素数个数π(x)与x/lnx渐近等价（比值趋近于1）；</li>
-<li>应用：用于计算欧拉函数、判断RSA等密码算法的安全性（依赖大素数难分解的特性）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-同余与剩余系">
-<a class="header-anchor" href="#2-%e5%90%8c%e4%bd%99%e4%b8%8e%e5%89%a9%e4%bd%99%e7%b3%bb"></a>
-2. 同余与剩余系
-</h3><ul>
-<li>
-<p><strong>同余</strong>：</p>
-<ul>
-<li>定义：若a和b除以m的余数相同，则称a≡b(mod m)（如17≡2 mod5），且a-b能被m整除；</li>
-<li>核心性质：
-<ul>
-<li>加减乘不变：如3≡8 mod5、4≡9 mod5，则3+4=7≡8+9=17 mod5，3×4=12≡8×9=72 mod5；</li>
-<li>消去律（有条件）：如2×3≡2×8 mod5，因2和5互素，可消去2得3≡8 mod5。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>剩余系</strong>：</p>
-<ul>
-<li>完全剩余系：除以m能覆盖0~m-1所有余数的一组数（无遗漏、无重复）；</li>
-<li>简化剩余系：从完全剩余系中筛选出与m互素的数，其个数为欧拉函数φ(m)；</li>
-<li>示例：模6的完全剩余系为{0,1,2,3,4,5}，简化剩余系为{1,5}，故φ(6)=2。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-欧拉函数欧拉定理与费马小定理">
-<a class="header-anchor" href="#3-%e6%ac%a7%e6%8b%89%e5%87%bd%e6%95%b0%e6%ac%a7%e6%8b%89%e5%ae%9a%e7%90%86%e4%b8%8e%e8%b4%b9%e9%a9%ac%e5%b0%8f%e5%ae%9a%e7%90%86"></a>
-3. 欧拉函数、欧拉定理与费马小定理
-</h3><ul>
-<li>
-<p><strong>欧拉函数φ(m)</strong>：1~m中与m互素的整数个数，如φ(6)=2。</p>
-        
-        <hr><p>本文2025-12-15首发于<a href='http://localhost:1336/'>SWEET'S BLOG</a>，最后修改于2025-12-15</p>]]>
-      </description>
-      
-        <category>ctf-math</category>
       
     </item>
     

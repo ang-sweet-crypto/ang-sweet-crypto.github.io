@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SWEET&#39;S BLOG</title>
-    <link>http://localhost:1336/</link>
+    <link>http://localhost:1336/post/</link>
     <description>Recent content from SWEET&#39;S BLOG</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
@@ -15,7 +15,7 @@
     <lastBuildDate>Tue, 30 Dec 2025 14:30:00 +0800</lastBuildDate>
     
     
-    <atom:link href="http://localhost:1336/index.xml" rel="self" type="application/rss&#43;xml" />
+    <atom:link href="http://localhost:1336/post/index.xml" rel="self" type="application/rss&#43;xml" />
     
 
     
