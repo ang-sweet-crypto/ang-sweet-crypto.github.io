@@ -1,0 +1,1203 @@
+<!doctype html>
+<html
+  lang="zh-CN" 
+  data-theme-mode="auto"
+  >
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1335&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/><title>
+  古典密码学入门：置换与替换的核心逻辑 | sweet
+</title>
+<meta name="description" content="提拉米苏亚米亚米"/><script>
+  window.siteConfig = JSON.parse("{\"anchor_icon\":null,\"base\":\"http://localhost:1335/\",\"clipboard\":{\"copyright\":{\"count\":50,\"enable\":false,\"license_type\":\"by-nc-sa\"},\"fail\":{\"en\":\"Copy failed (ﾟ⊿ﾟ)ﾂ\",\"ja\":\"コピー失敗 (ﾟ⊿ﾟ)ﾂ\",\"pt-br\":\"Falha ao copiar (ﾟ⊿ﾟ)ﾂ\",\"zh-cn\":\"复制失败 (ﾟ⊿ﾟ)ﾂ\",\"zh-tw\":\"複製失敗 (ﾟ⊿ﾟ)ﾂ\"},\"success\":{\"en\":\"Copy successfully (*^▽^*)\",\"ja\":\"コピー成功 (*^▽^*)\",\"pt-br\":\"Copiado com sucesso (*^▽^*)\",\"zh-cn\":\"复制成功 (*^▽^*)\",\"zh-tw\":\"複製成功 (*^▽^*)\"}},\"code_block\":{\"expand\":true},\"icon_font\":\"4552607_4k4bc36ef96\",\"outdate\":{\"daysago\":180,\"enable\":false,\"message\":{\"en\":\"This article was last updated on {time}. Please note that the content may no longer be applicable.\",\"ja\":\"この記事は最終更新日：{time}。記載内容が現在有効でない可能性がありますのでご注意ください。\",\"pt-br\":\"Este artigo foi atualizado pela última vez em {time}. Observe que o conteúdo pode não ser mais aplicável.\",\"zh-cn\":\"本文最后更新于 {time}，请注意文中内容可能已不适用。\",\"zh-tw\":\"本文最後更新於 {time}，請注意文中內容可能已不適用。\"}}}");
+  
+</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+  media="print"
+  onload="this.media='all'"
+/>
+<link
+    rel="preload"
+    href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin="anonymous"
+  /><link rel="stylesheet" href="/css/loader.css" /><meta property="og:type" content="website" />
+  <meta property="og:title" content="古典密码学入门：置换与替换的核心逻辑 | sweet" />
+  <meta
+    property="og:description"
+    content="提拉米苏亚米亚米"
+  />
+  <meta property="og:url" content="http://localhost:1335/post/%E5%8F%A4%E5%85%B8%E5%AF%86%E7%A0%81%E7%9A%84%E6%8E%A2%E7%B4%A2/" />
+  <meta
+    property="og:site_name"
+    content="SWEET&#39;S BLOG"
+  />
+  <meta
+    property="og:image"
+    content="/covers/reimu6.jpg"
+  />
+  <meta property="article:author" content="sweet" />
+  <meta property="article:published_time" content="2025-12-02T17:41:26&#43;08:00" />
+  <meta property="article:modified_time" content="2025-12-02T17:41:26&#43;08:00" /><meta property="article:tag" content="古典密码栅栏密码凯撒密码维吉尼亚密码置换密码替换密码PythonC语言CTF密码学" /><meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="/covers/reimu6.jpg" />
+<link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/main.css" /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css"
+    integrity="sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei&#43;Zx/1oA/0l8ysE" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.css"
+    integrity="sha384-tTgKLjMYmJr94v8qu2PE5MUGSMbyN2xiH266JUB3gpm8vnnJywd1dWSOEfrFz&#43;YI" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><script
+    src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"
+    
+    
+    
+    
+    integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css"
+    integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous"/><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css"
+    integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj&#43;vDDLIL&#43;xBGQU/voDBY5XE2lVh" crossorigin="anonymous"/></head>
+  <body><div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate"><svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+          M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg></div><div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script><div id="copy-tooltip"></div>
+<div id="lang-tooltip">
+本文章没有找到对应的语言版本
+</div>
+<div id="heatmap-tooltip"></div><div id="container">
+      <div id="wrap"><div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation"><a class="main-nav-link-wrap" href="/"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">首页</span>
+      </a><a class="main-nav-link-wrap" href="/archives"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">归档</span>
+      </a><a class="main-nav-link-wrap" href="/about"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">关于</span>
+      </a><a class="main-nav-link-wrap" href="/friend"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">友链</span>
+      </a><a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation"></nav></div>
+<header id="header" aria-label="Site header"><picture></picture>
+    <img  fetchpriority="high" src="/covers/reimu6.jpg" alt="古典密码学入门：置换与替换的核心逻辑"><div id="header-outer">
+    <div id="header-title"><span id="logo">
+            <h1 data-aos="slide-up">古典密码学入门：置换与替换的核心逻辑</h1>
+          </span><h2 id="subtitle-wrap" data-aos="slide-down"></h2></div>
+  </div>
+</header><div id="content"
+          aria-label="Page content"
+          class="sidebar-left"
+            ><aside id="sidebar" aria-label="Sidebar"><div class="sidebar-wrapper-container sticky"><div class="sidebar-wrapper">
+    <div
+      class="sidebar-wrap"
+      data-aos="fade-up"
+    ><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一古典密码的核心分类与设计原则">一、古典密码的核心分类与设计原则</a></li>
+    <li><a href="#二置换密码栅栏密码">二、置换密码：栅栏密码</a>
+      <ul>
+        <li><a href="#21-密码学定义与核心原理">2.1 密码学定义与核心原理</a></li>
+        <li><a href="#22-ctf实战解法">2.2 CTF实战解法</a></li>
+        <li><a href="#23-python实现">2.3 Python实现</a></li>
+        <li><a href="#24-常见陷阱ctf高频翻车点">2.4 常见陷阱（CTF高频翻车点）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三单表替换密码凯撒密码">三、单表替换密码：凯撒密码</a>
+      <ul>
+        <li><a href="#31-密码学定义与核心原理">3.1 密码学定义与核心原理</a></li>
+        <li><a href="#32-ctf实战解法">3.2 CTF实战解法</a></li>
+        <li><a href="#33-python实现">3.3 Python实现</a></li>
+        <li><a href="#34-c语言实现">3.4 C语言实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#四多表替换密码维吉尼亚密码">四、多表替换密码：维吉尼亚密码</a>
+      <ul>
+        <li><a href="#41-密码学定义与核心原理">4.1 密码学定义与核心原理</a></li>
+        <li><a href="#42-ctf实战解法">4.2 CTF实战解法</a></li>
+        <li><a href="#43-python实现">4.3 Python实现</a></li>
+        <li><a href="#44-常见陷阱">4.4 常见陷阱</a></li>
+      </ul>
+    </li>
+    <li><a href="#五python-vs-c古典密码实现的工程对比">五、Python vs C：古典密码实现的工程对比</a>
+      <ul>
+        <li><a href="#工程化建议">工程化建议</a></li>
+      </ul>
+    </li>
+    <li><a href="#六学习总结与后续规划">六、学习总结与后续规划</a>
+      <ul>
+        <li><a href="#后续规划ctf进阶方向">后续规划（CTF进阶方向）</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div></div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div><div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div></div>
+  </div><div class="sidebar-widget"></div></div></aside>
+<section id="main" aria-label="Main content"><article
+  class="h-entry article"
+  itemscope
+  itemtype="https://schema.org/BlogPosting"
+>
+  <div
+    class="article-inner"
+    data-aos="fade-up"
+  >
+    <div class="article-meta"><div class="article-date">
+  <span
+    class="article-date-link icon-calendar"
+    data-aos="zoom-in"
+  >
+    <time datetime="2025-12-02 17:41:26 &#43;0800 CST" itemprop="datePublished"
+      >2025-12-02</time
+    >
+    <time style="display: none;" id="post-update-time"
+      >2025-12-02</time
+    >
+  </span></div>
+</div><div class="hr-line"></div><div class="e-content article-entry" itemprop="articleBody"><h2 id="引言">
+<a class="header-anchor" href="#%e5%bc%95%e8%a8%80"></a>
+引言
+</h2><p>hello!欢迎来到咪猫魔法世界~</p>
+<p>古典密码作为密码学的启蒙积木，虽无现代密码的数学复杂度，却浓缩了置换与替换两大核心思想——这也是现代分组密码、流密码的底层雏形。</p>
+<p>在CTF场景中，古典密码常以送分题形式出现，但极易因细节（大小写、字符过滤、密钥格式）翻车。本文将从密码学定义、算法原理、CTF实战解法、工程实现到常见陷阱，全维度拆解栅栏、凯撒、维吉尼亚三类经典古典密码，同时对比Python与C语言实现的工程差异，为后续学习现代密码学筑牢基础。</p>
+<hr>
+<h2 id="一古典密码的核心分类与设计原则">
+<a class="header-anchor" href="#%e4%b8%80%e5%8f%a4%e5%85%b8%e5%af%86%e7%a0%81%e7%9a%84%e6%a0%b8%e5%bf%83%e5%88%86%e7%b1%bb%e4%b8%8e%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99"></a>
+一、古典密码的核心分类与设计原则
+</h2><p>古典密码的本质是对明文的字符或比特进行可逆变换，核心分为两类（符合Kerckhoffs原则：密码系统的安全性仅依赖密钥，而非算法本身）：</p>
+<ul>
+<li>置换密码：仅改变字符排列顺序，不修改字符本身（如栅栏、列置换密码）；</li>
+<li>替换密码：用新字符替换原字符，保持顺序不变（单表替换：凯撒；多表替换：维吉尼亚）。</li>
+</ul>
+<p>两类密码的共性：密钥空间有限，易被暴力破解或统计分析攻破——这也是古典密码仅适用于CTF入门，无法满足现代安全需求的核心原因。</p>
+<hr>
+<h2 id="二置换密码栅栏密码">
+<a class="header-anchor" href="#%e4%ba%8c%e7%bd%ae%e6%8d%a2%e5%af%86%e7%a0%81%e6%a0%85%e6%a0%8f%e5%af%86%e7%a0%81"></a>
+二、置换密码：栅栏密码
+</h2><h3 id="21-密码学定义与核心原理">
+<a class="header-anchor" href="#21-%e5%af%86%e7%a0%81%e5%ad%a6%e5%ae%9a%e4%b9%89%e4%b8%8e%e6%a0%b8%e5%bf%83%e5%8e%9f%e7%90%86"></a>
+2.1 密码学定义与核心原理
+</h3><p>栅栏密码是典型的路由置换密码，核心是将明文按固定轨道数（密钥）以之字形排列，再按轨道顺序拼接得到密文。</p>
+<h4 id="核心逻辑">
+<a class="header-anchor" href="#%e6%a0%b8%e5%bf%83%e9%80%bb%e8%be%91"></a>
+核心逻辑
+</h4><p>设明文为一串字符，轨道数为k（密钥），加密过程分为三步：</p>
+<ol>
+<li>构建k个空轨道（字符数组）；</li>
+<li>按向下、向上的折返规则，依次将明文字符填入对应轨道；</li>
+<li>按轨道顺序拼接所有字符，得到密文。</li>
+</ol>
+<h4 id="直观示例明文hellocryptok3">
+<a class="header-anchor" href="#%e7%9b%b4%e8%a7%82%e7%a4%ba%e4%be%8b%e6%98%8e%e6%96%87hellocryptok3"></a>
+直观示例（明文：HELLOCRYPTO，k=3）
+</h4><p>轨道0：H   L   R   T → HLRT
+轨道1：E L O C Y P O → ELOCYPO
+轨道2：L   C   O     → LCO
+密文：HLRTELOCYPOLCO</p>
+<h3 id="22-ctf实战解法">
+<a class="header-anchor" href="#22-ctf%e5%ae%9e%e6%88%98%e8%a7%a3%e6%b3%95"></a>
+2.2 CTF实战解法
+</h3><p>栅栏密码在CTF中仅有两种出题形式，解法高度固定：</p>
+<table>
+  <thead>
+      <tr>
+          <th>场景</th>
+          <th>解法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>已知轨道数k</td>
+          <td>直接按轨道折返规则还原明文</td>
+      </tr>
+      <tr>
+          <td>未知轨道数k</td>
+          <td>暴力枚举k在2到10之间（超过10无实际加密意义），通过自然语言可读性验证</td>
+      </tr>
+      <tr>
+          <td>变体（列栅栏）</td>
+          <td>按列数分组后反转列顺序（如k=2时，每2字符为一组交换位置）</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="23-python实现">
+<a class="header-anchor" href="#23-python%e5%ae%9e%e7%8e%b0"></a>
+2.3 Python实现
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 栅栏密码核心加解密</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rail_fence_encrypt</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">rails</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">rails</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">text</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">rails</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rows</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ch</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">r</span> <span class="o">==</span> <span class="n">rails</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">step</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="n">step</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rail_fence_decrypt</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="n">rails</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">rails</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">cipher</span>
+</span></span><span class="line"><span class="cl">    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cipher</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rail_idx</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rail_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">r</span> <span class="o">==</span> <span class="n">rails</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">step</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="n">step</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="n">rail_idx</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rails</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">rails_str</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rails_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cipher</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="n">c</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">start</span> <span class="o">+=</span> <span class="n">c</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">rid</span> <span class="ow">in</span> <span class="n">rail_idx</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rails_str</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 爆破示例</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rail_fence_brute</span><span class="p">(</span><span class="n">cipher</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">rail_fence_decrypt</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试</span>
+</span></span><span class="line"><span class="cl"><span class="n">plain</span> <span class="o">=</span> <span class="s2">&#34;HELLOCRYPTO&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cipher</span> <span class="o">=</span> <span class="n">rail_fence_encrypt</span><span class="p">(</span><span class="n">plain</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;加密结果：&#34;</span><span class="p">,</span> <span class="n">cipher</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;解密结果：&#34;</span><span class="p">,</span> <span class="n">rail_fence_decrypt</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24-常见陷阱ctf高频翻车点">
+<a class="header-anchor" href="#24-%e5%b8%b8%e8%a7%81%e9%99%b7%e9%98%b1ctf%e9%ab%98%e9%a2%91%e7%bf%bb%e8%bd%a6%e7%82%b9"></a>
+2.4 常见陷阱（CTF高频翻车点）
+</h3><ol>
+<li>明文含空格或标点：需确认题目要求保留或过滤（多数题目过滤非字母字符）；</li>
+<li>轨道数大于等于明文长度：加密后密文与明文一致，无实际意义；</li>
+<li>变体识别：部分题目标注栅栏密码但实际为列置换（需按列数分组反转）。</li>
+</ol>
+<p>参考资料：<a href="https://blog.csdn.net/Stone__Fly/article/details/53454418">栅栏密码原理与CTF实战</a></p>
+<hr>
+<h2 id="三单表替换密码凯撒密码">
+<a class="header-anchor" href="#%e4%b8%89%e5%8d%95%e8%a1%a8%e6%9b%bf%e6%8d%a2%e5%af%86%e7%a0%81%e5%87%af%e6%92%92%e5%af%86%e7%a0%81"></a>
+三、单表替换密码：凯撒密码
+</h2><h3 id="31-密码学定义与核心原理">
+<a class="header-anchor" href="#31-%e5%af%86%e7%a0%81%e5%ad%a6%e5%ae%9a%e4%b9%89%e4%b8%8e%e6%a0%b8%e5%bf%83%e5%8e%9f%e7%90%86"></a>
+3.1 密码学定义与核心原理
+</h3><p>凯撒密码是最基础的移位替换密码，核心是将明文字母按固定偏移量k（密钥）循环移位，属于单表替换（所有字符使用同一替换规则）。</p>
+<h4 id="核心逻辑仅考虑大写字母a-za对应0z对应25">
+<a class="header-anchor" href="#%e6%a0%b8%e5%bf%83%e9%80%bb%e8%be%91%e4%bb%85%e8%80%83%e8%99%91%e5%a4%a7%e5%86%99%e5%ad%97%e6%af%8da-za%e5%af%b9%e5%ba%940z%e5%af%b9%e5%ba%9425"></a>
+核心逻辑（仅考虑大写字母A-Z，A对应0，Z对应25）
+</h4><ul>
+<li>加密：明文字母按偏移量k向后移动，超出Z则循环到A；</li>
+<li>解密：密文字母按偏移量k向前移动，超出A则循环到Z。</li>
+</ul>
+<h4 id="特殊变体rot13">
+<a class="header-anchor" href="#%e7%89%b9%e6%ae%8a%e5%8f%98%e4%bd%93rot13"></a>
+特殊变体：ROT13
+</h4><p>当k=13时，加密与解密规则完全一致（13加13等于26，刚好循环一圈），是CTF中最常见的凯撒变体。</p>
+<h3 id="32-ctf实战解法">
+<a class="header-anchor" href="#32-ctf%e5%ae%9e%e6%88%98%e8%a7%a3%e6%b3%95"></a>
+3.2 CTF实战解法
+</h3><p>凯撒密码的密钥空间仅为26（k在0到25之间），解法极度简单：</p>
+<ol>
+<li>暴力枚举所有偏移量，通过自然语言可读性验证（含flag或ctf关键词直接锁定）；</li>
+<li>统计字符频率：英文中E出现频率最高，可通过密文高频字符反推偏移量（适用于长明文）。</li>
+</ol>
+<h3 id="33-python实现">
+<a class="header-anchor" href="#33-python%e5%ae%9e%e7%8e%b0"></a>
+3.3 Python实现
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 凯撒密码核心加解密</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">caesar_cipher</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">decrypt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">decrypt</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="n">k</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">ch</span><span class="o">.</span><span class="n">islower</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span><span class="o">-</span><span class="mi">97</span><span class="o">+</span><span class="n">k</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span><span class="o">+</span><span class="mi">97</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">ch</span><span class="o">.</span><span class="n">isupper</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span><span class="o">-</span><span class="mi">65</span><span class="o">+</span><span class="n">k</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span><span class="o">+</span><span class="mi">65</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 爆破示例</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">caesar_brute</span><span class="p">(</span><span class="n">cipher</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">caesar_cipher</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">decrypt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试</span>
+</span></span><span class="line"><span class="cl"><span class="n">plain</span> <span class="o">=</span> <span class="s2">&#34;FLAG</span><span class="si">{Caesar123}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cipher</span> <span class="o">=</span> <span class="n">caesar_cipher</span><span class="p">(</span><span class="n">plain</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;加密结果：&#34;</span><span class="p">,</span> <span class="n">cipher</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;解密结果：&#34;</span><span class="p">,</span> <span class="n">caesar_cipher</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">decrypt</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="34-c语言实现">
+<a class="header-anchor" href="#34-c%e8%af%ad%e8%a8%80%e5%ae%9e%e7%8e%b0"></a>
+3.4 C语言实现
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ctype.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">caesar_cipher_c</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">text</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">int</span> <span class="n">decrypt</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">decrypt</span><span class="p">)</span> <span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="n">k</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="nf">strlen</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nf">islower</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">26</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span> <span class="o">+</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nf">isupper</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;A&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">26</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span> <span class="o">+</span> <span class="sc">&#39;A&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">cipher</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&#34;IODJ{Fdhvdu123}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">caesar_cipher_c</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;解密结果：%s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cipher</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="四多表替换密码维吉尼亚密码">
+<a class="header-anchor" href="#%e5%9b%9b%e5%a4%9a%e8%a1%a8%e6%9b%bf%e6%8d%a2%e5%af%86%e7%a0%81%e7%bb%b4%e5%90%89%e5%b0%bc%e4%ba%9a%e5%af%86%e7%a0%81"></a>
+四、多表替换密码：维吉尼亚密码
+</h2><h3 id="41-密码学定义与核心原理">
+<a class="header-anchor" href="#41-%e5%af%86%e7%a0%81%e5%ad%a6%e5%ae%9a%e4%b9%89%e4%b8%8e%e6%a0%b8%e5%bf%83%e5%8e%9f%e7%90%86"></a>
+4.1 密码学定义与核心原理
+</h3><p>维吉尼亚密码是凯撒密码的多表扩展，核心是用关键词（密钥）动态生成偏移量序列，每个字符使用不同的凯撒偏移量，提升单表替换的抗破解性。</p>
+<h4 id="核心逻辑-1">
+<a class="header-anchor" href="#%e6%a0%b8%e5%bf%83%e9%80%bb%e8%be%91-1"></a>
+核心逻辑
+</h4><p>设明文为一串字符，关键词为一组字母（长度为l），则第i个字符的偏移量为关键词第i mod l个字母对应的数值（A对应0，Z对应25）：</p>
+<ul>
+<li>加密：明文字符按对应偏移量向后移动；</li>
+<li>解密：密文字符按对应偏移量向前移动。</li>
+</ul>
+<h3 id="42-ctf实战解法">
+<a class="header-anchor" href="#42-ctf%e5%ae%9e%e6%88%98%e8%a7%a3%e6%b3%95"></a>
+4.2 CTF实战解法
+</h3><table>
+  <thead>
+      <tr>
+          <th>场景</th>
+          <th>解法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>已知关键词</td>
+          <td>按关键词长度循环生成偏移量，逐字符解密</td>
+      </tr>
+      <tr>
+          <td>未知关键词（短）</td>
+          <td>爆破关键词长度（2到8）+ 单表频率分析</td>
+      </tr>
+      <tr>
+          <td>未知关键词（长）</td>
+          <td>用Kasiski检验或Friedman测试计算关键词长度，再逐表频率分析</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="43-python实现">
+<a class="header-anchor" href="#43-python%e5%ae%9e%e7%8e%b0"></a>
+4.3 Python实现
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 维吉尼亚密码核心加解密</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">vigenere_cipher</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">decrypt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">key</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()])</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">text</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">ch</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">            <span class="n">base</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">ch</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span> <span class="k">else</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">shift</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">j</span> <span class="o">%</span> <span class="n">key_len</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">decrypt</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">shift</span> <span class="o">=</span> <span class="o">-</span><span class="n">shift</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span><span class="o">-</span><span class="n">base</span><span class="o">+</span><span class="n">shift</span><span class="p">)</span><span class="o">%</span><span class="mi">26</span><span class="o">+</span><span class="n">base</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试</span>
+</span></span><span class="line"><span class="cl"><span class="n">plain</span> <span class="o">=</span> <span class="s2">&#34;FLAG</span><span class="si">{Vigenere123}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="s2">&#34;CRYPTO&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cipher</span> <span class="o">=</span> <span class="n">vigenere_cipher</span><span class="p">(</span><span class="n">plain</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;加密结果：&#34;</span><span class="p">,</span> <span class="n">cipher</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;解密结果：&#34;</span><span class="p">,</span> <span class="n">vigenere_cipher</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">decrypt</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="44-常见陷阱">
+<a class="header-anchor" href="#44-%e5%b8%b8%e8%a7%81%e9%99%b7%e9%98%b1"></a>
+4.4 常见陷阱
+</h3><ol>
+<li>关键词含非字母字符：需先过滤（仅保留字母）；</li>
+<li>大小写混合：建议统一转为大写或小写后处理；</li>
+<li>明文长度小于关键词长度：关键词截断后使用。</li>
+</ol>
+<p>参考资料：<a href="https://blog.csdn.net/qq_42650988/article/details/104342775">维吉尼亚密码原理与实现</a></p>
+<hr>
+<h2 id="五python-vs-c古典密码实现的工程对比">
+<a class="header-anchor" href="#%e4%ba%94python-vs-c%e5%8f%a4%e5%85%b8%e5%af%86%e7%a0%81%e5%ae%9e%e7%8e%b0%e7%9a%84%e5%b7%a5%e7%a8%8b%e5%af%b9%e6%af%94"></a>
+五、Python vs C：古典密码实现的工程对比
+</h2><table>
+  <thead>
+      <tr>
+          <th>对比维度</th>
+          <th>Python 实现特点</th>
+          <th>C 语言实现特点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>字符串处理</td>
+          <td>不可变字符串，切片/拼接便捷，无需手动管理内存</td>
+          <td>字符数组加\0结尾，易出现越界或内存泄漏</td>
+      </tr>
+      <tr>
+          <td>字符运算</td>
+          <td>ord/chr 封装ASCII转换，模运算直观</td>
+          <td>手动对齐ASCII码（ch-&lsquo;A&rsquo;），需处理负数</td>
+      </tr>
+      <tr>
+          <td>代码效率</td>
+          <td>开发效率高，适合快速试错/爆破</td>
+          <td>执行效率高，适合嵌入式/底层实现</td>
+      </tr>
+      <tr>
+          <td>调试成本</td>
+          <td>print/Jupyter 快速调试</td>
+          <td>需结合gdb或valgrind排查内存问题</td>
+      </tr>
+      <tr>
+          <td>依赖管理</td>
+          <td>标准库全覆盖，第三方库安装便捷</td>
+          <td>仅依赖系统头文件，无外部依赖</td>
+      </tr>
+      <tr>
+          <td>CTF适用场景</td>
+          <td>批量爆破、脚本化解题、快速验证思路</td>
+          <td>分析题目提供的C程序、底层漏洞挖掘</td>
+      </tr>
+      <tr>
+          <td>常见错误</td>
+          <td>字节/字符串编码混淆、索引越界</td>
+          <td>缓冲区溢出、scanf读入截断、空指针访问</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="工程化建议">
+<a class="header-anchor" href="#%e5%b7%a5%e7%a8%8b%e5%8c%96%e5%bb%ba%e8%ae%ae"></a>
+工程化建议
+</h3><ul>
+<li>学习阶段：Python写思路，C写理解——先用Python快速验证密码算法逻辑，再用C实现以理解底层内存/字符操作；</li>
+<li>CTF实战：优先用Python编写爆破脚本，效率比C高10倍以上；</li>
+<li>工程落地：核心加密逻辑用C实现（性能），上层控制逻辑用Python实现（便捷）。</li>
+</ul>
+<hr>
+<h2 id="六学习总结与后续规划">
+<a class="header-anchor" href="#%e5%85%ad%e5%ad%a6%e4%b9%a0%e6%80%bb%e7%bb%93%e4%b8%8e%e5%90%8e%e7%bb%ad%e8%a7%84%e5%88%92"></a>
+六、学习总结与后续规划
+</h2><p>古典密码虽简单，却承载了密码学的核心思维：</p>
+<ol>
+<li>Kerckhoffs原则：安全性仅依赖密钥（古典密码因密钥空间小，无法满足现代需求）；</li>
+<li>对称加密雏形：置换加替换是AES、DES的核心操作（字节代换、行移位、列混合）；</li>
+<li>暴力破解思想：密钥空间有限时，枚举是最直接的破解手段。</li>
+</ol>
+<h3 id="后续规划ctf进阶方向">
+<a class="header-anchor" href="#%e5%90%8e%e7%bb%ad%e8%a7%84%e5%88%92ctf%e8%bf%9b%e9%98%b6%e6%96%b9%e5%90%91"></a>
+后续规划（CTF进阶方向）
+</h3><ol>
+<li>封装古典密码自动求解工具：输入密文，自动识别密码类型，爆破输出候选明文；</li>
+<li>学习古典密码的进阶变体：仿射密码、Playfair密码、希尔密码；</li>
+<li>衔接现代密码学：从古典密码的手动置换/替换，过渡到AES的轮函数自动变换。</li>
+</ol>
+<p>如果你也在深耕CTF Crypto方向，欢迎来咪喵魔法部交流～一起从古典密码的小魔法，解锁现代密码学的大工程。</p>
+<pre tabindex="0"><code></code></pre></div>
+    <footer class="article-footer"><ul class="article-category-list"><li class="article-tag-list-item" data-aos="zoom-in">
+    <a
+      class="article-category-link"
+      href="/categories/ctf-crypto"
+      data-aos="zoom-in"
+      >ctf-crypto</a
+    >
+    </li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%8f%a4%e5%85%b8%e5%af%86%e7%a0%81"
+        rel="tag"
+        >古典密码</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e6%a0%85%e6%a0%8f%e5%af%86%e7%a0%81"
+        rel="tag"
+        >栅栏密码</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%87%af%e6%92%92%e5%af%86%e7%a0%81"
+        rel="tag"
+        >凯撒密码</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e7%bb%b4%e5%90%89%e5%b0%bc%e4%ba%9a%e5%af%86%e7%a0%81"
+        rel="tag"
+        >维吉尼亚密码</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e7%bd%ae%e6%8d%a2%e5%af%86%e7%a0%81"
+        rel="tag"
+        >置换密码</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e6%9b%bf%e6%8d%a2%e5%af%86%e7%a0%81"
+        rel="tag"
+        >替换密码</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/python"
+        rel="tag"
+        >Python</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/c%e8%af%ad%e8%a8%80"
+        rel="tag"
+        >C语言</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/ctf%e5%af%86%e7%a0%81%e5%ad%a6"
+        rel="tag"
+        >CTF密码学</a
+      >
+    </li></ul>
+</footer>
+  </div><nav
+    id="article-nav"
+    aria-label="Article navigation"
+    data-aos="fade-up"
+  ><div class="article-nav-link-wrap left"><img
+            data-src="/covers/reimu1.jpg"
+            data-sizes="auto"
+            alt="Crypto入门-基于Windows操作系统的环境配置"
+            class="lazyload"
+          /><a
+          href="/post/crypto%E5%85%A5%E9%97%A8--%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/"
+          aria-label="前一篇:Crypto入门-基于Windows操作系统的环境配置"
+          title="前一篇:Crypto入门-基于Windows操作系统的环境配置"
+        ></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">Crypto入门-基于Windows操作系统的环境配置</h3>
+      </div><div class="article-nav-link-wrap right"><img
+            data-src="/covers/reimu4.jpg"
+            data-sizes="auto"
+            alt="CyberChef：编码基础与可视化解密"
+            class="lazyload"
+          /><a
+          href="/post/%E7%BC%96%E7%A0%81%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%E8%A7%A3%E5%AF%86/"
+          aria-label="后一篇:CyberChef：编码基础与可视化解密"
+          title="后一篇:CyberChef：编码基础与可视化解密"
+        ></a>
+        <div class="article-nav-caption">后一篇</div>
+        <h3 class="article-nav-title">CyberChef：编码基础与可视化解密</h3>
+      </div></nav></article></section>
+        </div><footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info"><div>
+      <span class="icon-copyright"></span>2020-2026<span class="footer-info-sep rotate"></span>sweet
+    </div><div>
+        基于&nbsp;<a
+          href="https://gohugo.io/"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Hugo</a
+        >&nbsp;Theme.<a
+          href="https://github.com/D-Sketon/hugo-theme-reimu"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Reimu</a
+        >
+      </div><div>
+        <span class="icon-brush"
+          >&nbsp;5.6k</span
+        >
+        &nbsp;|&nbsp;
+        <span class="icon-coffee">&nbsp;00:33</span>
+      </div><div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv"
+          >总访问量&nbsp;<span
+            id="busuanzi_value_site_pv"
+          ></span
+        ></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv"
+          >总访客量&nbsp;<span
+            id="busuanzi_value_site_uv"
+          ></span
+        ></span>
+      </div></div>
+</footer>
+<div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div><div id="mask" class="hide"></div>
+      </div><nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap"><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一古典密码的核心分类与设计原则">一、古典密码的核心分类与设计原则</a></li>
+    <li><a href="#二置换密码栅栏密码">二、置换密码：栅栏密码</a>
+      <ul>
+        <li><a href="#21-密码学定义与核心原理">2.1 密码学定义与核心原理</a></li>
+        <li><a href="#22-ctf实战解法">2.2 CTF实战解法</a></li>
+        <li><a href="#23-python实现">2.3 Python实现</a></li>
+        <li><a href="#24-常见陷阱ctf高频翻车点">2.4 常见陷阱（CTF高频翻车点）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三单表替换密码凯撒密码">三、单表替换密码：凯撒密码</a>
+      <ul>
+        <li><a href="#31-密码学定义与核心原理">3.1 密码学定义与核心原理</a></li>
+        <li><a href="#32-ctf实战解法">3.2 CTF实战解法</a></li>
+        <li><a href="#33-python实现">3.3 Python实现</a></li>
+        <li><a href="#34-c语言实现">3.4 C语言实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#四多表替换密码维吉尼亚密码">四、多表替换密码：维吉尼亚密码</a>
+      <ul>
+        <li><a href="#41-密码学定义与核心原理">4.1 密码学定义与核心原理</a></li>
+        <li><a href="#42-ctf实战解法">4.2 CTF实战解法</a></li>
+        <li><a href="#43-python实现">4.3 Python实现</a></li>
+        <li><a href="#44-常见陷阱">4.4 常见陷阱</a></li>
+      </ul>
+    </li>
+    <li><a href="#五python-vs-c古典密码实现的工程对比">五、Python vs C：古典密码实现的工程对比</a>
+      <ul>
+        <li><a href="#工程化建议">工程化建议</a></li>
+      </ul>
+    </li>
+    <li><a href="#六学习总结与后续规划">六、学习总结与后续规划</a>
+      <ul>
+        <li><a href="#后续规划ctf进阶方向">后续规划（CTF进阶方向）</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div></div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div></div><div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div></nav>
+</div><meting-js
+        theme="var(--color-link)"
+        id="8648104018"server="netease"type="playlist"fixed="true">
+      </meting-js><script
+    src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"
+    
+    
+    
+    
+    integrity="sha384-3gT/vsepWkfz/ff7PpWNUeMzeWoH3cDhm/A8jM7ouoAK0/fP/9bcHHR5kHq2nf&#43;e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"
+    
+    
+    
+    
+    integrity="sha384-J08i8An/QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script><script src="/js/main.js"  ></script><script src="/js/aos.js"  ></script><script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", aosInit);
+    } else {
+      aosInit();
+    }
+  </script><script src="/js/pjax_main.js" data-pjax ></script><script>
+  var setupFirework = () => {
+    if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+      if (window.firework) {
+        const options = JSON.parse("{\"excludeelements\":[\"a\",\"button\"],\"particles\":[{\"colors\":[\"var(--red-1)\",\"var(--red-2)\",\"var(--red-3)\",\"var(--red-4)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"emit\"],\"number\":20,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.3,0.5],\"radius\":[16,32]}},{\"colors\":[\"var(--red-0)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"diffuse\"],\"number\":1,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.2,0.5],\"lineWidth\":6,\"radius\":20}}]}");
+        options.excludeElements = options.excludeelements;
+        delete options.excludeelements;
+        window.firework(options);
+      }
+    }
+  }
+</script><script
+    src="https://npm.webcache.cn/mouse-firework@0.2.0/dist/index.umd.js"
+    defer
+    
+    
+    onload="setupFirework()"
+    integrity="sha384-qi9WggRt19tv8Vc7pCHW3ulMNLwrn515zaLEWZjl1px07vz8&#43;pUoWX8n1rgq282T" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/theme-shokax-pjax@0.0.3/dist/index.umd.js"
+    
+    
+    
+    
+    integrity="sha384-xneY1WY8hOfUzswrE4CrYq35N4BdVcxqxwHPr9zawE/jMSCxD&#43;jAPU55x/jj3wlf" crossorigin="anonymous"></script><script src="/js/pjax.js"  ></script><script>
+  var setupLive2d = () => {
+    live2d.init('https:\/\/fastly.jsdelivr.net\/gh\/D-Sketon\/plugin-live2d\/', {themeTipsPath: ""});
+  }
+</script><script
+    src="https://fastly.jsdelivr.net/gh/D-Sketon/plugin-live2d/js/live2d-autoload.js"
+    
+    async
+    
+    onload="setupLive2d()"
+    ></script>
+
+<div id="lazy-script">
+  <div><script data-pjax>
+        window.REIMU_POST = {
+          author: "sweet",
+          title: "古典密码学入门：置换与替换的核心逻辑",
+          url: "http:\/\/localhost:1335\/post\/%E5%8F%A4%E5%85%B8%E5%AF%86%E7%A0%81%E7%9A%84%E6%8E%A2%E7%B4%A2\/",
+          description: "\r引言\rhello!欢迎来到咪猫魔法世界~\n古典密码作为密码学的启蒙积木，虽无现代密码的数学复杂度，却浓缩了置换与替换两大核心思想——这也是现代分组密码、流密码的底层雏形。\n在CTF场景中，古典密码常以送分题形式出现，但极易因细节（大小写、字符过滤、密钥格式）翻车。本文将从密码学定义、算法原理、CTF实战解法、工程实现到常见陷阱，全维度拆解栅栏、凯撒、维吉尼亚三类经典古典密码，同时对比Python与C语言实现的工程差异，为后续学习现代密码学筑牢基础。\n一、古典密码的核心分类与设计原则\r古典密码的本质是对明文的字符或比特进行可逆变换，核心分为两类（符合Kerckhoffs原则：密码系统的安全性仅 …",
+          cover: "http:\/\/localhost:1335\/covers\/reimu6.jpg",
+        };
+      </script><script src="/js/insert_highlight.js" data-pjax ></script><script src="/js/tabs.js" data-pjax defer></script><script type="module" data-pjax>const PhotoSwipeLightbox = (await safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js", "sha384-DiL6M\/gG\u002bwmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF\/N6lrZi\/")).default;const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,pswpModule: () => safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8\u002boTJ7m3DfYEWX1fu1scuS4\u002bs")}).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-MWNUH0WmtsYGhn2cbH6ELRCbf9LG3QDqCC&#43;gqPB3IBNO35xjZK3Ejb6oONRpDbPg" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/contrib/auto-render.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv&#43;fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script data-pjax>
+          var renderMath = () => {
+            if (!window.renderMathInElement) return;
+            window.renderMathInElement(_$("article"), {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+              ],
+            });
+          };
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", renderMath, { once: true });
+          } else {
+            renderMath();
+          }
+        </script></div>
+</div><script
+    src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js"
+    
+    async
+    
+    
+    integrity="sha384-0M75wtSkhjIInv4coYlaJU83&#43;OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id&#43;S" crossorigin="anonymous"></script><script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  </script><script>
+  const reimuCopyright = String.raw`
+   ______     ______     __     __    __     __  __    
+  /\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+  \ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+   \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+    \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                    
+  `;
+  console.log(String.raw`%c ${reimuCopyright}`, "color: #ff5252;");
+  console.log(
+    "%c Theme.Reimu" + " %c https://github.com/D-Sketon/hugo-theme-reimu ",
+    "color: white; background: #ff5252; padding:5px 0;",
+    "padding:4px;border:1px solid #ff5252;",
+  );
+</script><script>
+    var setupAPlayer = () => {
+      if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+        if (window.matchMedia('(max-width: 959px)').matches) {
+          const meting = _$('meting-js');
+          if (meting) {
+            meting.setAttribute('fixed', 'true');
+            const aside = meting.parentNode?.parentNode;
+            if (aside?.tagName === 'ASIDE') {
+              meting.parentNode.removeChild(meting);
+              document.body.appendChild(meting);
+            }
+          }
+        }
+      }
+    };var meting_api = 'https:\/\/api.injahow.cn\/meting\/?server=:server\u0026type=:type\u0026id=:id';</script><script
+    src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js"
+    defer
+    
+    
+    onload="setupAPlayer()"
+    integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr&#43;h5UfruuRL/aORyw&#43;5&#43;HZoU6e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js"
+    defer
+    
+    
+    
+    integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8&#43;0maanw1S/IyB&#43;Y4JG&#43;ZDU7GpKE8" crossorigin="anonymous"></script></body>
+</html>

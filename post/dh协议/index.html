@@ -1,0 +1,1077 @@
+<!doctype html>
+<html
+  lang="zh-CN" 
+  data-theme-mode="auto"
+  >
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1335&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/><title>
+  密钥交换的魔法：DH协议与STS协议🐾 | sweet
+</title>
+<meta name="description" content="提拉米苏亚米亚米"/><script>
+  window.siteConfig = JSON.parse("{\"anchor_icon\":null,\"base\":\"http://localhost:1335/\",\"clipboard\":{\"copyright\":{\"count\":50,\"enable\":false,\"license_type\":\"by-nc-sa\"},\"fail\":{\"en\":\"Copy failed (ﾟ⊿ﾟ)ﾂ\",\"ja\":\"コピー失敗 (ﾟ⊿ﾟ)ﾂ\",\"pt-br\":\"Falha ao copiar (ﾟ⊿ﾟ)ﾂ\",\"zh-cn\":\"复制失败 (ﾟ⊿ﾟ)ﾂ\",\"zh-tw\":\"複製失敗 (ﾟ⊿ﾟ)ﾂ\"},\"success\":{\"en\":\"Copy successfully (*^▽^*)\",\"ja\":\"コピー成功 (*^▽^*)\",\"pt-br\":\"Copiado com sucesso (*^▽^*)\",\"zh-cn\":\"复制成功 (*^▽^*)\",\"zh-tw\":\"複製成功 (*^▽^*)\"}},\"code_block\":{\"expand\":true},\"icon_font\":\"4552607_4k4bc36ef96\",\"outdate\":{\"daysago\":180,\"enable\":false,\"message\":{\"en\":\"This article was last updated on {time}. Please note that the content may no longer be applicable.\",\"ja\":\"この記事は最終更新日：{time}。記載内容が現在有効でない可能性がありますのでご注意ください。\",\"pt-br\":\"Este artigo foi atualizado pela última vez em {time}. Observe que o conteúdo pode não ser mais aplicável.\",\"zh-cn\":\"本文最后更新于 {time}，请注意文中内容可能已不适用。\",\"zh-tw\":\"本文最後更新於 {time}，請注意文中內容可能已不適用。\"}}}");
+  
+</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+  media="print"
+  onload="this.media='all'"
+/>
+<link
+    rel="preload"
+    href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin="anonymous"
+  /><link rel="stylesheet" href="/css/loader.css" /><meta property="og:type" content="website" />
+  <meta property="og:title" content="密钥交换的魔法：DH协议与STS协议🐾 | sweet" />
+  <meta
+    property="og:description"
+    content="提拉米苏亚米亚米"
+  />
+  <meta property="og:url" content="http://localhost:1335/post/dh%E5%8D%8F%E8%AE%AE/" />
+  <meta
+    property="og:site_name"
+    content="SWEET&#39;S BLOG"
+  />
+  <meta
+    property="og:image"
+    content="/covers/reimu2.jpg"
+  />
+  <meta property="article:author" content="sweet" />
+  <meta property="article:published_time" content="2025-12-25T16:00:00&#43;08:00" />
+  <meta property="article:modified_time" content="2025-12-25T16:00:00&#43;08:00" /><meta property="article:tag" content="DH协议STS协议中间人攻击密钥交换数字签名前向保密密码学协议" /><meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="/covers/reimu2.jpg" />
+<link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/main.css" /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css"
+    integrity="sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei&#43;Zx/1oA/0l8ysE" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.css"
+    integrity="sha384-tTgKLjMYmJr94v8qu2PE5MUGSMbyN2xiH266JUB3gpm8vnnJywd1dWSOEfrFz&#43;YI" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><script
+    src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"
+    
+    
+    
+    
+    integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css"
+    integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous"/><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css"
+    integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj&#43;vDDLIL&#43;xBGQU/voDBY5XE2lVh" crossorigin="anonymous"/></head>
+  <body><div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate"><svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+          M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg></div><div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script><div id="copy-tooltip"></div>
+<div id="lang-tooltip">
+本文章没有找到对应的语言版本
+</div>
+<div id="heatmap-tooltip"></div><div id="container">
+      <div id="wrap"><div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation"><a class="main-nav-link-wrap" href="/"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">首页</span>
+      </a><a class="main-nav-link-wrap" href="/archives"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">归档</span>
+      </a><a class="main-nav-link-wrap" href="/about"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">关于</span>
+      </a><a class="main-nav-link-wrap" href="/friend"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">友链</span>
+      </a><a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation"></nav></div>
+<header id="header" aria-label="Site header"><picture></picture>
+    <img  fetchpriority="high" src="/covers/reimu2.jpg" alt="密钥交换的魔法：DH协议与STS协议🐾"><div id="header-outer">
+    <div id="header-title"><span id="logo">
+            <h1 data-aos="slide-up">密钥交换的魔法：DH协议与STS协议🐾</h1>
+          </span><h2 id="subtitle-wrap" data-aos="slide-down"></h2></div>
+  </div>
+</header><div id="content"
+          aria-label="Page content"
+          class="sidebar-left"
+            ><aside id="sidebar" aria-label="Sidebar"><div class="sidebar-wrapper-container sticky"><div class="sidebar-wrapper">
+    <div
+      class="sidebar-wrap"
+      data-aos="fade-up"
+    ><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一dh协议基础不安全信道的密钥魔法">一、DH协议基础：不安全信道的密钥魔法</a>
+      <ul>
+        <li><a href="#11-核心原理离散对数难题">1.1 核心原理：离散对数难题</a></li>
+        <li><a href="#12-dh协议流程基础原始版">1.2 DH协议流程（基础原始版）</a></li>
+        <li><a href="#13-python代码实现">1.3 Python代码实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#二致命漏洞中间人攻击如何破解dh协议">二、致命漏洞：中间人攻击如何破解DH协议？</a>
+      <ul>
+        <li><a href="#21-中间人攻击原理">2.1 中间人攻击原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#三防护方案简化sts协议身份绑定签名验证">三、防护方案：简化STS协议（身份绑定+签名验证）</a>
+      <ul>
+        <li><a href="#31-简化sts协议核心逻辑">3.1 简化STS协议核心逻辑</a></li>
+        <li><a href="#32-核心安全点">3.2 核心安全点</a></li>
+        <li><a href="#33-python代码实现可直接运行">3.3 Python代码实现（可直接运行）</a></li>
+      </ul>
+    </li>
+    <li><a href="#-咪猫碎碎念">✨ 咪猫碎碎念</a>
+      <ul>
+        <li><a href="#参考blog">参考blog</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div></div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div><div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div></div>
+  </div><div class="sidebar-widget"></div></div></aside>
+<section id="main" aria-label="Main content"><article
+  class="h-entry article"
+  itemscope
+  itemtype="https://schema.org/BlogPosting"
+>
+  <div
+    class="article-inner"
+    data-aos="fade-up"
+  >
+    <div class="article-meta"><div class="article-date">
+  <span
+    class="article-date-link icon-calendar"
+    data-aos="zoom-in"
+  >
+    <time datetime="2025-12-25 16:00:00 &#43;0800 CST" itemprop="datePublished"
+      >2025-12-25</time
+    >
+    <time style="display: none;" id="post-update-time"
+      >2025-12-25</time
+    >
+  </span></div>
+</div><div class="hr-line"></div><div class="e-content article-entry" itemprop="articleBody"><h2 id="引言">
+<a class="header-anchor" href="#%e5%bc%95%e8%a8%80"></a>
+引言
+</h2><p>hello！欢迎回到咪猫魔法世界~ 🐾✨</p>
+<p>在不安全的网络里，怎么安全交换只有双方知道的共享密钥？这就轮到DH协议登场啦！它能在被监听的信道上，让通信双方算出相同的密钥，却让窃听者无从下手——核心秘诀就是“离散对数难题”的魔力~o( =∩ω∩= )m～</p>
+<p>本文专门拆解DH协议的基础原理、中间人攻击的漏洞，以及简化STS协议的防护方案，还给出了可直接运行的Python代码，全程保持“边学边踩坑”的真实感，帮助各位新手师傅们搞懂密钥交换的核心逻辑！</p>
+<hr>
+<h2 id="一dh协议基础不安全信道的密钥魔法">
+<a class="header-anchor" href="#%e4%b8%80dh%e5%8d%8f%e8%ae%ae%e5%9f%ba%e7%a1%80%e4%b8%8d%e5%ae%89%e5%85%a8%e4%bf%a1%e9%81%93%e7%9a%84%e5%af%86%e9%92%a5%e9%ad%94%e6%b3%95"></a>
+一、DH协议基础：不安全信道的密钥魔法
+</h2><p>DH协议（Diffie-Hellman协议）是密钥交换的经典方案，1976年由Whitfield Diffie和Martin Hellman提出，核心是“公开参数+私有计算”，让双方在不泄露私钥的情况下，协商出共享密钥。</p>
+<h3 id="11-核心原理离散对数难题">
+<a class="header-anchor" href="#11-%e6%a0%b8%e5%bf%83%e5%8e%9f%e7%90%86%e7%a6%bb%e6%95%a3%e5%af%b9%e6%95%b0%e9%9a%be%e9%a2%98"></a>
+1.1 核心原理：离散对数难题
+</h3><p>DH协议的安全性完全依赖“离散对数问题”的困难性：</p>
+<ul>
+<li>已知大素数p、模p的本原根g（g的幂能生成模p的所有非零剩余类），以及 \(g^a \pmod{p}\)，想反推出私钥a，在p足够大时几乎不可能（暴力破解无效）；</li>
+<li>正向计算很简单：已知a，计算 \(g^a \pmod{p}\) 高效可行。</li>
+</ul>
+<h3 id="12-dh协议流程基础原始版">
+<a class="header-anchor" href="#12-dh%e5%8d%8f%e8%ae%ae%e6%b5%81%e7%a8%8b%e5%9f%ba%e7%a1%80%e5%8e%9f%e5%a7%8b%e7%89%88"></a>
+1.2 DH协议流程（基础原始版）
+</h3><h4 id="文字版步骤">
+<a class="header-anchor" href="#%e6%96%87%e5%ad%97%e7%89%88%e6%ad%a5%e9%aa%a4"></a>
+文字版步骤：
+</h4><ol>
+<li>公开参数协商：双方先约定公开参数——大素数p和模p的本原根g（可公开传输，无需保密）；</li>
+<li>私钥生成：
+<ul>
+<li>Alice生成私钥a（保密），计算公钥 \(A = g^a \pmod{p}\)，发给Bob；</li>
+<li>Bob生成私钥b（保密），计算公钥 \(B = g^b \pmod{p}\)，发给Alice；</li>
+</ul>
+</li>
+<li>共享密钥计算：
+<ul>
+<li>Alice用Bob的公钥B和自己的私钥a，计算 \(K = B^a \pmod{p} = (g^b)^a \pmod{p} = g^{ab} \pmod{p}\)；</li>
+<li>Bob用Alice的公钥A和自己的私钥b，计算 \(K = A^b \pmod{p} = (g^a)^b \pmod{p} = g^{ab} \pmod{p}\)；</li>
+</ul>
+</li>
+<li>结果：双方得到相同的共享密钥K，窃听者仅能获取p、g、A、B，无法推导K。</li>
+</ol>
+<h4 id="原理图解">
+<a class="header-anchor" href="#%e5%8e%9f%e7%90%86%e5%9b%be%e8%a7%a3"></a>
+原理图解：
+</h4><pre tabindex="0"><code>Alice                  不安全信道                  Bob
+  |                        |                        |
+  |  生成私钥a，计算A=g^a mod p                  |
+  |-------------------------------------------&gt;|
+  |                        |                        |
+  |                                          生成私钥b，计算B=g^b mod p
+  |&lt;-------------------------------------------|
+  |                        |                        |
+  |  计算K=B^a mod p                          |
+  |                        |                        |  计算K=A^b mod p
+  |                        |                        |
+  |  共享密钥K                                  共享密钥K
+  |                        |                        |
+</code></pre><h3 id="13-python代码实现">
+<a class="header-anchor" href="#13-python%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0"></a>
+1.3 Python代码实现
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">dh_simulate</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">alice_a</span><span class="p">,</span> <span class="n">bob_b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 分别生成Alice和Bob的公钥</span>
+</span></span><span class="line"><span class="cl">    <span class="n">alice_A</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">alice_a</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bob_B</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">bob_b</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 分别计算Alice和Bob的共享密钥</span>
+</span></span><span class="line"><span class="cl">    <span class="n">alice_shared</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">bob_B</span><span class="p">,</span> <span class="n">alice_a</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bob_shared</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">alice_A</span><span class="p">,</span> <span class="n">bob_b</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 验证双方计算出的共享密钥是否一致</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 若共享密钥不一致，说明可能遭受中间人攻击，模拟失败</span>
+</span></span><span class="line"><span class="cl">    <span class="k">assert</span> <span class="n">alice_shared</span> <span class="o">==</span> <span class="n">bob_shared</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">alice_shared</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 手动输入p、g、alice_a、bob_b（可替换为大素数和大私钥）</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="mi">23</span>  <span class="c1"># 模素数（实际应用需用2048位以上大素数）</span>
+</span></span><span class="line"><span class="cl"><span class="n">g</span> <span class="o">=</span> <span class="mi">5</span>   <span class="c1"># 模23的本原根（5的幂能生成1~22所有数）</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_a</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># Alice的私钥（保密）</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_b</span> <span class="o">=</span> <span class="mi">15</span>   <span class="c1"># Bob的私钥（保密）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">shared_key</span> <span class="o">=</span> <span class="n">dh_simulate</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">alice_a</span><span class="p">,</span> <span class="n">bob_b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;公共参数:p=</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">, g=</span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Alice的私钥:</span><span class="si">{</span><span class="n">alice_a</span><span class="si">}</span><span class="s2">, 公钥:</span><span class="si">{</span><span class="nb">pow</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">alice_a</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Bob的私钥:</span><span class="si">{</span><span class="n">bob_b</span><span class="si">}</span><span class="s2">, 公钥:</span><span class="si">{</span><span class="nb">pow</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">bob_b</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;共享密钥:</span><span class="si">{</span><span class="n">shared_key</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="运行结果">
+<a class="header-anchor" href="#%e8%bf%90%e8%a1%8c%e7%bb%93%e6%9e%9c"></a>
+运行结果：
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">公共参数</span><span class="p">:</span><span class="n">p</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mi">5</span>
+</span></span><span class="line"><span class="cl"><span class="n">Alice的私钥</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="n">公钥</span><span class="p">:</span><span class="mi">8</span>
+</span></span><span class="line"><span class="cl"><span class="n">Bob的私钥</span><span class="p">:</span><span class="mi">15</span><span class="p">,</span> <span class="n">公钥</span><span class="p">:</span><span class="mi">19</span>
+</span></span><span class="line"><span class="cl"><span class="n">共享密钥</span><span class="p">:</span><span class="mi">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="二致命漏洞中间人攻击如何破解dh协议">
+<a class="header-anchor" href="#%e4%ba%8c%e8%87%b4%e5%91%bd%e6%bc%8f%e6%b4%9e%e4%b8%ad%e9%97%b4%e4%ba%ba%e6%94%bb%e5%87%bb%e5%a6%82%e4%bd%95%e7%a0%b4%e8%a7%a3dh%e5%8d%8f%e8%ae%ae"></a>
+二、致命漏洞：中间人攻击如何破解DH协议？
+</h2><p>基础DH协议看似完美，但有个致命缺陷——<strong>缺乏身份验证</strong>，中间人能轻松篡改公钥，窃取通信内容！</p>
+<h3 id="21-中间人攻击原理">
+<a class="header-anchor" href="#21-%e4%b8%ad%e9%97%b4%e4%ba%ba%e6%94%bb%e5%87%bb%e5%8e%9f%e7%90%86"></a>
+2.1 中间人攻击原理
+</h3><p>中间人（Mallory）不需要破解离散对数，只需拦截并伪造公钥，就能在Alice和Bob之间“插一脚”，成为双方的“秘密通信对象”：</p>
+<h4 id="文字版步骤-1">
+<a class="header-anchor" href="#%e6%96%87%e5%ad%97%e7%89%88%e6%ad%a5%e9%aa%a4-1"></a>
+文字版步骤：
+</h4><ol>
+<li>Alice生成公钥A并发送给Bob，中间人拦截A，伪造自己的公钥 \(g^{m1}\) 发给Bob；</li>
+<li>Bob生成公钥B并发送给Alice，中间人拦截B，伪造自己的公钥 \(g^{m2}\) 发给Alice；</li>
+<li>Alice用伪造的公钥 \(g^{m2}\) 和自己的私钥a，计算与中间人的共享密钥 \(K1 = (g^{m2})^a \pmod{p}\)；</li>
+<li>Bob用伪造的公钥 \(g^{m1}\) 和自己的私钥b，计算与中间人的共享密钥 \(K2 = (g^{m1})^b \pmod{p}\)；</li>
+<li>后续通信：Alice加密信息用K1，中间人解密后用K2重新加密发给Bob；Bob加密信息用K2，中间人解密后用K1重新加密发给Alice——中间人完全掌控通信内容！</li>
+</ol>
+<h4 id="攻击图解">
+<a class="header-anchor" href="#%e6%94%bb%e5%87%bb%e5%9b%be%e8%a7%a3"></a>
+攻击图解：
+</h4><pre tabindex="0"><code>Alice                  中间人                  Bob
+  |                        |                        |
+  |  发送A=g^a                                 |
+  |-------------------------------------------&gt;|
+  |                        |  伪造并发送g^m1       |
+  |                        |----------------------&gt;|
+  |                        |                        |
+  |                                          发送B=g^b
+  |&lt;-------------------------------------------|
+  |  伪造并发送g^m2       |                        |
+  |&lt;------------------------------------------|
+  |                        |                        |
+  |  计算K1=(g^m2)^a mod p                    |  计算K2=(g^m1)^b mod p
+  |                        |                        |
+  |  与中间人共享密钥K1                        与中间人共享密钥K2
+  |                        |                        |
+</code></pre><h4 id="攻击成功原因">
+<a class="header-anchor" href="#%e6%94%bb%e5%87%bb%e6%88%90%e5%8a%9f%e5%8e%9f%e5%9b%a0"></a>
+攻击成功原因：
+</h4><p>基础DH协议只验证“公钥计算的密钥一致性”，不验证“公钥的真实归属”——Bob无法确认收到的公钥是不是Alice发的，Alice也无法确认收到的公钥是不是Bob发的。</p>
+<hr>
+<h2 id="三防护方案简化sts协议身份绑定签名验证">
+<a class="header-anchor" href="#%e4%b8%89%e9%98%b2%e6%8a%a4%e6%96%b9%e6%a1%88%e7%ae%80%e5%8c%96sts%e5%8d%8f%e8%ae%ae%e8%ba%ab%e4%bb%bd%e7%bb%91%e5%ae%9a%e7%ad%be%e5%90%8d%e9%aa%8c%e8%af%81"></a>
+三、防护方案：简化STS协议（身份绑定+签名验证）
+</h2><p>要抵御中间人攻击，核心是给公钥“验明正身”——简化STS协议（Station-to-Station Protocol）用<strong>数字签名绑定身份与公钥</strong>，既保留DH协议的优势，又补上身份验证的漏洞。</p>
+<h3 id="31-简化sts协议核心逻辑">
+<a class="header-anchor" href="#31-%e7%ae%80%e5%8c%96sts%e5%8d%8f%e8%ae%ae%e6%a0%b8%e5%bf%83%e9%80%bb%e8%be%91"></a>
+3.1 简化STS协议核心逻辑
+</h3><p>核心思路：用数字签名证明“公钥属于某个身份”，双方先验证签名，再计算密钥，确保公钥没被篡改。</p>
+<h4 id="文字版步骤-2">
+<a class="header-anchor" href="#%e6%96%87%e5%ad%97%e7%89%88%e6%ad%a5%e9%aa%a4-2"></a>
+文字版步骤：
+</h4><ol>
+<li>准备工作：Alice和Bob各自拥有RSA密钥对（私钥保密，公钥可公开），用于数字签名和验证；</li>
+<li>公开参数：双方约定DH协议的大素数p和本原根g；</li>
+<li>临时公钥生成：
+<ul>
+<li>Alice生成DH临时私钥a，计算临时公钥A；</li>
+<li>Bob生成DH临时私钥b，计算临时公钥B；</li>
+</ul>
+</li>
+<li>签名公钥：
+<ul>
+<li>Alice用自己的RSA私钥，对“自己的身份+临时公钥A+Bob的临时公钥B”签名，得到签名Sig_A；</li>
+<li>Bob用自己的RSA私钥，对“自己的身份+临时公钥B+Alice的临时公钥A”签名，得到签名Sig_B；</li>
+</ul>
+</li>
+<li>交换并验证：
+<ul>
+<li>Alice发送A和Sig_A给Bob，Bob发送B和Sig_B给Alice；</li>
+<li>Alice用Bob的RSA公钥验证Sig_B，确认B是Bob的真实公钥；</li>
+<li>Bob用Alice的RSA公钥验证Sig_A，确认A是Alice的真实公钥；</li>
+</ul>
+</li>
+<li>计算共享密钥：验证通过后，双方用各自的DH私钥和对方的真实公钥，计算共享密钥K。</li>
+</ol>
+<h3 id="32-核心安全点">
+<a class="header-anchor" href="#32-%e6%a0%b8%e5%bf%83%e5%ae%89%e5%85%a8%e7%82%b9"></a>
+3.2 核心安全点
+</h3><ul>
+<li>身份绑定：签名将“临时公钥”与“身份”强绑定，中间人无法伪造（没有对方的RSA私钥，签不出合法签名）；</li>
+<li>前向保密：临时DH密钥使用后立即丢弃，即使长期RSA私钥泄露，也不会影响历史会话的密钥安全；</li>
+<li>防篡改：签名能验证公钥是否被篡改，一旦中间人替换公钥，签名验证会失败。</li>
+</ul>
+<h3 id="33-python代码实现可直接运行">
+<a class="header-anchor" href="#33-python%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0%e5%8f%af%e7%9b%b4%e6%8e%a5%e8%bf%90%e8%a1%8c"></a>
+3.3 Python代码实现（可直接运行）
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.asymmetric</span> <span class="kn">import</span> <span class="n">rsa</span><span class="p">,</span> <span class="n">padding</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives</span> <span class="kn">import</span> <span class="n">hashes</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">cryptography.exceptions</span> <span class="kn">import</span> <span class="n">InvalidSignature</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ===================== 步骤1:生成RSA密钥对(用于身份签名) =====================</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Alice的RSA密钥对（私钥保密，公钥可公开）</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_rsa_private</span> <span class="o">=</span> <span class="n">rsa</span><span class="o">.</span><span class="n">generate_private_key</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">public_exponent</span><span class="o">=</span><span class="mi">65537</span><span class="p">,</span>  <span class="c1"># 公钥指数，常规选65537</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key_size</span><span class="o">=</span><span class="mi">2048</span>           <span class="c1"># 密钥长度，越长越安全</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_rsa_public</span> <span class="o">=</span> <span class="n">alice_rsa_private</span><span class="o">.</span><span class="n">public_key</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Bob的RSA密钥对（私钥保密，公钥可公开）</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_rsa_private</span> <span class="o">=</span> <span class="n">rsa</span><span class="o">.</span><span class="n">generate_private_key</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">public_exponent</span><span class="o">=</span><span class="mi">65537</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key_size</span><span class="o">=</span><span class="mi">2048</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_rsa_public</span> <span class="o">=</span> <span class="n">bob_rsa_private</span><span class="o">.</span><span class="n">public_key</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ===================== 步骤2:DH参数与密钥生成 =====================</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># DH公共参数（实际应用需选2048位以上大素数和本原根）</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="mi">23</span>  <span class="c1"># 示例用小素数，方便手动验证</span>
+</span></span><span class="line"><span class="cl"><span class="n">g</span> <span class="o">=</span> <span class="mi">5</span>   <span class="c1"># 模23的本原根（5的幂能生成1~22所有数）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Alice的DH私钥 + 公钥（临时密钥，用完即弃）</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_dh_private</span> <span class="o">=</span> <span class="mi">6</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_dh_public</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">alice_dh_private</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># 计算 g^a mod p</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Bob的DH私钥 + 公钥（临时密钥，用完即弃）</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_dh_private</span> <span class="o">=</span> <span class="mi">15</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_dh_public</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">bob_dh_private</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># 计算 g^b mod p</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ===================== 步骤3:对“身份+DH公钥”进行RSA签名 =====================</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Alice签名自己的“身份+DH公钥”（绑定身份与公钥）</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_identity</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;Alice&#34;</span>  <span class="c1"># 身份标识（可替换为真实用户名/设备ID）</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_sign_data</span> <span class="o">=</span> <span class="n">alice_identity</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">alice_dh_public</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>  <span class="c1"># 待签名数据</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_signature</span> <span class="o">=</span> <span class="n">alice_rsa_private</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">alice_sign_data</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mgf</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">MGF1</span><span class="p">(</span><span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()),</span>  <span class="c1"># 掩码生成函数</span>
+</span></span><span class="line"><span class="cl">        <span class="n">salt_length</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="o">.</span><span class="n">MAX_LENGTH</span>
+</span></span><span class="line"><span class="cl">    <span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()</span>  <span class="c1"># 哈希算法</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Bob签名自己的“身份+DH公钥”（绑定身份与公钥）</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_identity</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;Bob&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_sign_data</span> <span class="o">=</span> <span class="n">bob_identity</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bob_dh_public</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_signature</span> <span class="o">=</span> <span class="n">bob_rsa_private</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bob_sign_data</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">mgf</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">MGF1</span><span class="p">(</span><span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">salt_length</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="o">.</span><span class="n">MAX_LENGTH</span>
+</span></span><span class="line"><span class="cl">    <span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ===================== 步骤4:验证对方签名(防止中间人攻击) =====================</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Alice验证Bob的签名（确认Bob的公钥真实）</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bob_rsa_public</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bob_signature</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bob_sign_data</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mgf</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">MGF1</span><span class="p">(</span><span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">salt_length</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="o">.</span><span class="n">MAX_LENGTH</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;✅ Alice验证Bob的签名成功 → Bob的DH公钥可信，无中间人攻击！&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">except</span> <span class="n">InvalidSignature</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;❌ Alice验证Bob的签名失败 → 存在中间人攻击风险！&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Bob验证Alice的签名（确认Alice的公钥真实）</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">alice_rsa_public</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">alice_signature</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">alice_sign_data</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mgf</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">MGF1</span><span class="p">(</span><span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">salt_length</span><span class="o">=</span><span class="n">padding</span><span class="o">.</span><span class="n">PSS</span><span class="o">.</span><span class="n">MAX_LENGTH</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">hashes</span><span class="o">.</span><span class="n">SHA256</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;✅ Bob验证Alice的签名成功 → Alice的DH公钥可信，无中间人攻击！&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">except</span> <span class="n">InvalidSignature</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;❌ Bob验证Alice的签名失败 → 存在中间人攻击风险！&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ===================== 步骤5:计算共享密钥(验证通过后) =====================</span>
+</span></span><span class="line"><span class="cl"><span class="n">alice_shared</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">bob_dh_public</span><span class="p">,</span> <span class="n">alice_dh_private</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>  <span class="c1"># 计算 (g^b)^a mod p</span>
+</span></span><span class="line"><span class="cl"><span class="n">bob_shared</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">alice_dh_public</span><span class="p">,</span> <span class="n">bob_dh_private</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>    <span class="c1"># 计算 (g^a)^b mod p</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">Alice 计算的共享密钥:</span><span class="si">{</span><span class="n">alice_shared</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Bob 计算的共享密钥:</span><span class="si">{</span><span class="n">bob_shared</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">assert</span> <span class="n">alice_shared</span> <span class="o">==</span> <span class="n">bob_shared</span><span class="p">,</span> <span class="s2">&#34;DH共享密钥不一致，流程错误！&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;🎉 验证通过:Alice与Bob的共享密钥一致，通信可安全进行！&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-咪猫碎碎念">
+<a class="header-anchor" href="#-%e5%92%aa%e7%8c%ab%e7%a2%8e%e7%a2%8e%e5%bf%b5"></a>
+✨ 咪猫碎碎念
+</h2><p>DH协议的核心真的很巧妙——不用传递密钥，却能让双方算出相同的密钥，这就是数论的魔力！但一定要记住：<strong>基础DH协议不防中间人攻击</strong>，必须搭配身份验证！</p>
+<p>简化STS协议的核心就是“签名绑定身份”，把“公钥是不是对方的”这个问题，转化为“签名是不是对方签的”——而数字签名的安全性依赖于私钥保密，完美补上了DH的漏洞。</p>
+<p>实际应用中，HTTPS、SSH等协议的密钥交换，本质都是DH协议的优化版（比如ECDH，基于椭圆曲线的DH，效率更高），再搭配数字签名和证书，确保通信安全～ 学习时一定要动手跑代码，看着密钥一致的那一刻，真的很有成就感！~o( =∩ω∩= )m</p>
+<h3 id="参考blog">
+<a class="header-anchor" href="#%e5%8f%82%e8%80%83blog"></a>
+参考blog
+</h3><ul>
+<li><a href="https://blog.csdn.net/weixin_43940387/article/details/109235646">DH密钥交换协议原理详解</a></li>
+</ul>
+</div>
+    <footer class="article-footer"><ul class="article-category-list"><li class="article-tag-list-item" data-aos="zoom-in">
+    <a
+      class="article-category-link"
+      href="/categories/ctf-crypto"
+      data-aos="zoom-in"
+      >ctf-crypto</a
+    >
+    </li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/dh%e5%8d%8f%e8%ae%ae"
+        rel="tag"
+        >DH协议</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/sts%e5%8d%8f%e8%ae%ae"
+        rel="tag"
+        >STS协议</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e4%b8%ad%e9%97%b4%e4%ba%ba%e6%94%bb%e5%87%bb"
+        rel="tag"
+        >中间人攻击</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%af%86%e9%92%a5%e4%ba%a4%e6%8d%a2"
+        rel="tag"
+        >密钥交换</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e6%95%b0%e5%ad%97%e7%ad%be%e5%90%8d"
+        rel="tag"
+        >数字签名</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%89%8d%e5%90%91%e4%bf%9d%e5%af%86"
+        rel="tag"
+        >前向保密</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%af%86%e7%a0%81%e5%ad%a6%e5%8d%8f%e8%ae%ae"
+        rel="tag"
+        >密码学协议</a
+      >
+    </li></ul>
+</footer>
+  </div><nav
+    id="article-nav"
+    aria-label="Article navigation"
+    data-aos="fade-up"
+  ><div class="article-nav-link-wrap left"><img
+            data-src="/covers/reimu5.jpg"
+            data-sizes="auto"
+            alt="二次剩余与勒让德符号🐾"
+            class="lazyload"
+          /><a
+          href="/post/%E4%BA%8C%E6%AC%A1%E5%89%A9%E4%BD%99%E4%B8%8E%E5%8B%92%E8%AE%A9%E5%BE%B7%E7%AC%A6%E5%8F%B7/"
+          aria-label="前一篇:二次剩余与勒让德符号🐾"
+          title="前一篇:二次剩余与勒让德符号🐾"
+        ></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">二次剩余与勒让德符号🐾</h3>
+      </div><div class="article-nav-link-wrap right"><img
+            data-src="/covers/reimu12.jpg"
+            data-sizes="auto"
+            alt="维纳攻击(Wiener&#39;s Attack)🐾"
+            class="lazyload"
+          /><a
+          href="/post/%E7%BB%B4%E7%BA%B3%E6%94%BB%E5%87%BB/"
+          aria-label="后一篇:维纳攻击(Wiener&#39;s Attack)🐾"
+          title="后一篇:维纳攻击(Wiener&#39;s Attack)🐾"
+        ></a>
+        <div class="article-nav-caption">后一篇</div>
+        <h3 class="article-nav-title">维纳攻击(Wiener&#39;s Attack)🐾</h3>
+      </div></nav></article></section>
+        </div><footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info"><div>
+      <span class="icon-copyright"></span>2020-2026<span class="footer-info-sep rotate"></span>sweet
+    </div><div>
+        基于&nbsp;<a
+          href="https://gohugo.io/"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Hugo</a
+        >&nbsp;Theme.<a
+          href="https://github.com/D-Sketon/hugo-theme-reimu"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Reimu</a
+        >
+      </div><div>
+        <span class="icon-brush"
+          >&nbsp;5.6k</span
+        >
+        &nbsp;|&nbsp;
+        <span class="icon-coffee">&nbsp;00:33</span>
+      </div><div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv"
+          >总访问量&nbsp;<span
+            id="busuanzi_value_site_pv"
+          ></span
+        ></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv"
+          >总访客量&nbsp;<span
+            id="busuanzi_value_site_uv"
+          ></span
+        ></span>
+      </div></div>
+</footer>
+<div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div><div id="mask" class="hide"></div>
+      </div><nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap"><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一dh协议基础不安全信道的密钥魔法">一、DH协议基础：不安全信道的密钥魔法</a>
+      <ul>
+        <li><a href="#11-核心原理离散对数难题">1.1 核心原理：离散对数难题</a></li>
+        <li><a href="#12-dh协议流程基础原始版">1.2 DH协议流程（基础原始版）</a></li>
+        <li><a href="#13-python代码实现">1.3 Python代码实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#二致命漏洞中间人攻击如何破解dh协议">二、致命漏洞：中间人攻击如何破解DH协议？</a>
+      <ul>
+        <li><a href="#21-中间人攻击原理">2.1 中间人攻击原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#三防护方案简化sts协议身份绑定签名验证">三、防护方案：简化STS协议（身份绑定+签名验证）</a>
+      <ul>
+        <li><a href="#31-简化sts协议核心逻辑">3.1 简化STS协议核心逻辑</a></li>
+        <li><a href="#32-核心安全点">3.2 核心安全点</a></li>
+        <li><a href="#33-python代码实现可直接运行">3.3 Python代码实现（可直接运行）</a></li>
+      </ul>
+    </li>
+    <li><a href="#-咪猫碎碎念">✨ 咪猫碎碎念</a>
+      <ul>
+        <li><a href="#参考blog">参考blog</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div></div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div></div><div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div></nav>
+</div><meting-js
+        theme="var(--color-link)"
+        id="8648104018"server="netease"type="playlist"fixed="true">
+      </meting-js><script
+    src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"
+    
+    
+    
+    
+    integrity="sha384-3gT/vsepWkfz/ff7PpWNUeMzeWoH3cDhm/A8jM7ouoAK0/fP/9bcHHR5kHq2nf&#43;e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"
+    
+    
+    
+    
+    integrity="sha384-J08i8An/QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script><script src="/js/main.js"  ></script><script src="/js/aos.js"  ></script><script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", aosInit);
+    } else {
+      aosInit();
+    }
+  </script><script src="/js/pjax_main.js" data-pjax ></script><script>
+  var setupFirework = () => {
+    if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+      if (window.firework) {
+        const options = JSON.parse("{\"excludeelements\":[\"a\",\"button\"],\"particles\":[{\"colors\":[\"var(--red-1)\",\"var(--red-2)\",\"var(--red-3)\",\"var(--red-4)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"emit\"],\"number\":20,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.3,0.5],\"radius\":[16,32]}},{\"colors\":[\"var(--red-0)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"diffuse\"],\"number\":1,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.2,0.5],\"lineWidth\":6,\"radius\":20}}]}");
+        options.excludeElements = options.excludeelements;
+        delete options.excludeelements;
+        window.firework(options);
+      }
+    }
+  }
+</script><script
+    src="https://npm.webcache.cn/mouse-firework@0.2.0/dist/index.umd.js"
+    defer
+    
+    
+    onload="setupFirework()"
+    integrity="sha384-qi9WggRt19tv8Vc7pCHW3ulMNLwrn515zaLEWZjl1px07vz8&#43;pUoWX8n1rgq282T" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/theme-shokax-pjax@0.0.3/dist/index.umd.js"
+    
+    
+    
+    
+    integrity="sha384-xneY1WY8hOfUzswrE4CrYq35N4BdVcxqxwHPr9zawE/jMSCxD&#43;jAPU55x/jj3wlf" crossorigin="anonymous"></script><script src="/js/pjax.js"  ></script><script>
+  var setupLive2d = () => {
+    live2d.init('https:\/\/fastly.jsdelivr.net\/gh\/D-Sketon\/plugin-live2d\/', {themeTipsPath: ""});
+  }
+</script><script
+    src="https://fastly.jsdelivr.net/gh/D-Sketon/plugin-live2d/js/live2d-autoload.js"
+    
+    async
+    
+    onload="setupLive2d()"
+    ></script>
+
+<div id="lazy-script">
+  <div><script data-pjax>
+        window.REIMU_POST = {
+          author: "sweet",
+          title: "密钥交换的魔法：DH协议与STS协议🐾",
+          url: "http:\/\/localhost:1335\/post\/dh%E5%8D%8F%E8%AE%AE\/",
+          description: "\r引言\rhello！欢迎回到咪猫魔法世界~ 🐾✨\n在不安全的网络里，怎么安全交换只有双方知道的共享密钥？这就轮到DH协议登场啦！它能在被监听的信道上，让通信双方算出相同的密钥，却让窃听者无从下手——核心秘诀就是“离散对数难题”的魔力~o( =∩ω∩= )m～\n本文专门拆解DH协议的基础原理、中间人攻击的漏洞，以及简化STS协议的防护方案，还给出了可直接运行的Python代码，全程保持“边学边踩坑”的真实感，帮助各位新手师傅们搞懂密钥交换的核心逻辑！\n一、DH协议基础：不安全信道的密钥魔法\rDH协议（Diffie-Hellman协议）是密钥交换的经典方案，1976年由Whitfield …",
+          cover: "http:\/\/localhost:1335\/covers\/reimu2.jpg",
+        };
+      </script><script src="/js/insert_highlight.js" data-pjax ></script><script src="/js/tabs.js" data-pjax defer></script><script type="module" data-pjax>const PhotoSwipeLightbox = (await safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js", "sha384-DiL6M\/gG\u002bwmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF\/N6lrZi\/")).default;const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,pswpModule: () => safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8\u002boTJ7m3DfYEWX1fu1scuS4\u002bs")}).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-MWNUH0WmtsYGhn2cbH6ELRCbf9LG3QDqCC&#43;gqPB3IBNO35xjZK3Ejb6oONRpDbPg" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/contrib/auto-render.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv&#43;fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script data-pjax>
+          var renderMath = () => {
+            if (!window.renderMathInElement) return;
+            window.renderMathInElement(_$("article"), {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+              ],
+            });
+          };
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", renderMath, { once: true });
+          } else {
+            renderMath();
+          }
+        </script></div>
+</div><script
+    src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js"
+    
+    async
+    
+    
+    integrity="sha384-0M75wtSkhjIInv4coYlaJU83&#43;OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id&#43;S" crossorigin="anonymous"></script><script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  </script><script>
+  const reimuCopyright = String.raw`
+   ______     ______     __     __    __     __  __    
+  /\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+  \ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+   \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+    \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                    
+  `;
+  console.log(String.raw`%c ${reimuCopyright}`, "color: #ff5252;");
+  console.log(
+    "%c Theme.Reimu" + " %c https://github.com/D-Sketon/hugo-theme-reimu ",
+    "color: white; background: #ff5252; padding:5px 0;",
+    "padding:4px;border:1px solid #ff5252;",
+  );
+</script><script>
+    var setupAPlayer = () => {
+      if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+        if (window.matchMedia('(max-width: 959px)').matches) {
+          const meting = _$('meting-js');
+          if (meting) {
+            meting.setAttribute('fixed', 'true');
+            const aside = meting.parentNode?.parentNode;
+            if (aside?.tagName === 'ASIDE') {
+              meting.parentNode.removeChild(meting);
+              document.body.appendChild(meting);
+            }
+          }
+        }
+      }
+    };var meting_api = 'https:\/\/api.injahow.cn\/meting\/?server=:server\u0026type=:type\u0026id=:id';</script><script
+    src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js"
+    defer
+    
+    
+    onload="setupAPlayer()"
+    integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr&#43;h5UfruuRL/aORyw&#43;5&#43;HZoU6e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js"
+    defer
+    
+    
+    
+    integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8&#43;0maanw1S/IyB&#43;Y4JG&#43;ZDU7GpKE8" crossorigin="anonymous"></script></body>
+</html>
