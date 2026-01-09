@@ -1,0 +1,862 @@
+<!doctype html>
+<html
+  lang="zh-CN" 
+  data-theme-mode="auto"
+  >
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1335&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/><title>
+  哈希算法与文件隐写基础 | sweet
+</title>
+<meta name="description" content="提拉米苏亚米亚米"/><script>
+  window.siteConfig = JSON.parse("{\"anchor_icon\":null,\"base\":\"http://localhost:1335/\",\"clipboard\":{\"copyright\":{\"count\":50,\"enable\":false,\"license_type\":\"by-nc-sa\"},\"fail\":{\"en\":\"Copy failed (ﾟ⊿ﾟ)ﾂ\",\"ja\":\"コピー失敗 (ﾟ⊿ﾟ)ﾂ\",\"pt-br\":\"Falha ao copiar (ﾟ⊿ﾟ)ﾂ\",\"zh-cn\":\"复制失败 (ﾟ⊿ﾟ)ﾂ\",\"zh-tw\":\"複製失敗 (ﾟ⊿ﾟ)ﾂ\"},\"success\":{\"en\":\"Copy successfully (*^▽^*)\",\"ja\":\"コピー成功 (*^▽^*)\",\"pt-br\":\"Copiado com sucesso (*^▽^*)\",\"zh-cn\":\"复制成功 (*^▽^*)\",\"zh-tw\":\"複製成功 (*^▽^*)\"}},\"code_block\":{\"expand\":true},\"icon_font\":\"4552607_4k4bc36ef96\",\"outdate\":{\"daysago\":180,\"enable\":false,\"message\":{\"en\":\"This article was last updated on {time}. Please note that the content may no longer be applicable.\",\"ja\":\"この記事は最終更新日：{time}。記載内容が現在有効でない可能性がありますのでご注意ください。\",\"pt-br\":\"Este artigo foi atualizado pela última vez em {time}. Observe que o conteúdo pode não ser mais aplicável.\",\"zh-cn\":\"本文最后更新于 {time}，请注意文中内容可能已不适用。\",\"zh-tw\":\"本文最後更新於 {time}，請注意文中內容可能已不適用。\"}}}");
+  
+</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+  media="print"
+  onload="this.media='all'"
+/>
+<link
+    rel="preload"
+    href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin="anonymous"
+  /><link rel="stylesheet" href="/css/loader.css" /><meta property="og:type" content="website" />
+  <meta property="og:title" content="哈希算法与文件隐写基础 | sweet" />
+  <meta
+    property="og:description"
+    content="提拉米苏亚米亚米"
+  />
+  <meta property="og:url" content="http://localhost:1335/post/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%B8%8E%E6%96%87%E4%BB%B6%E9%9A%90%E5%86%99%E5%9F%BA%E7%A1%80/" />
+  <meta
+    property="og:site_name"
+    content="SWEET&#39;S BLOG"
+  />
+  <meta
+    property="og:image"
+    content="/"
+  />
+  <meta property="article:author" content="sweet" />
+  <meta property="article:published_time" content="2025-12-08T14:00:00&#43;08:00" />
+  <meta property="article:modified_time" content="2025-12-08T14:00:00&#43;08:00" /><meta property="article:tag" content="哈希算法MD5SHA256文件隐写CyberChefCTF密码学" /><meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="/" />
+<link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/main.css" /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css"
+    integrity="sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei&#43;Zx/1oA/0l8ysE" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.css"
+    integrity="sha384-tTgKLjMYmJr94v8qu2PE5MUGSMbyN2xiH266JUB3gpm8vnnJywd1dWSOEfrFz&#43;YI" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><script
+    src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"
+    
+    
+    
+    
+    integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css"
+    integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous"/><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css"
+    integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj&#43;vDDLIL&#43;xBGQU/voDBY5XE2lVh" crossorigin="anonymous"/></head>
+  <body><div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate"><svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+          M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg></div><div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script><div id="copy-tooltip"></div>
+<div id="lang-tooltip">
+本文章没有找到对应的语言版本
+</div>
+<div id="heatmap-tooltip"></div><div id="container">
+      <div id="wrap"><div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation"><a class="main-nav-link-wrap" href="/"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">首页</span>
+      </a><a class="main-nav-link-wrap" href="/archives"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">归档</span>
+      </a><a class="main-nav-link-wrap" href="/about"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">关于</span>
+      </a><a class="main-nav-link-wrap" href="/friend"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">友链</span>
+      </a><a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation"></nav></div>
+<header id="header" aria-label="Site header"><picture></picture><img  fetchpriority="high" src="/images/banner.webp" alt="哈希算法与文件隐写基础"><div id="header-outer">
+    <div id="header-title"><span id="logo">
+            <h1 data-aos="slide-up">哈希算法与文件隐写基础</h1>
+          </span><h2 id="subtitle-wrap" data-aos="slide-down"></h2></div>
+  </div>
+</header><div id="content"
+          aria-label="Page content"
+          class="sidebar-left"
+            ><aside id="sidebar" aria-label="Sidebar"><div class="sidebar-wrapper-container sticky"><div class="sidebar-wrapper">
+    <div
+      class="sidebar-wrap"
+      data-aos="fade-up"
+    ><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一关于哈希--加密--编码">一、关于哈希 / 加密 / 编码</a></li>
+    <li><a href="#二哈希到底强在哪里也脆在哪里">二、哈希到底强在哪里（也脆在哪里）</a></li>
+    <li><a href="#三ctf-高频哈希算法">三、CTF 高频哈希算法</a></li>
+    <li><a href="#四哈希题怎么做才稳一条主线走到底">四、哈希题怎么做才稳：一条主线走到底</a>
+      <ul>
+        <li><a href="#一个练手的小例子">一个练手的小例子</a></li>
+      </ul>
+    </li>
+    <li><a href="#五三种常见题型其实都在匹配">五、三种常见题型：其实都在“匹配”</a>
+      <ul>
+        <li><a href="#1送分型直接计算对比">1）送分型：直接计算对比</a></li>
+        <li><a href="#2高频型爆破字典匹配">2）高频型：爆破/字典匹配⭐</a></li>
+        <li><a href="#3结合隐写文件校验不一致">3）结合隐写：文件校验不一致</a></li>
+      </ul>
+    </li>
+    <li><a href="#六文件隐写解密之前先听文件说话">六、文件隐写：”解密“之前先听文件说话</a>
+      <ul>
+        <li><a href="#1魔法识别看-magic-bytes文件签名">1）“魔法识别”：看 Magic Bytes（文件签名）</a></li>
+        <li><a href="#2魔法切片从数据流里挖出嵌套文件">2）“魔法切片”：从数据流里挖出嵌套文件</a></li>
+        <li><a href="#3结构感图片类隐写为什么容易藏东西">3）“结构感”：图片类隐写为什么容易藏东西</a></li>
+      </ul>
+    </li>
+    <li><a href="#七咪猫的三大避坑点">七、咪猫的三大避坑点</a></li>
+    <li><a href="#八总结">八、总结：</a></li>
+  </ul>
+</nav>
+</div></div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div><div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div></div>
+  </div><div class="sidebar-widget"></div></div></aside>
+<section id="main" aria-label="Main content"><article
+  class="h-entry article"
+  itemscope
+  itemtype="https://schema.org/BlogPosting"
+>
+  <div
+    class="article-inner"
+    data-aos="fade-up"
+  >
+    <div class="article-meta"><div class="article-date">
+  <span
+    class="article-date-link icon-calendar"
+    data-aos="zoom-in"
+  >
+    <time datetime="2025-12-08 14:00:00 &#43;0800 CST" itemprop="datePublished"
+      >2025-12-08</time
+    >
+    <time style="display: none;" id="post-update-time"
+      >2025-12-08</time
+    >
+  </span></div>
+</div><div class="hr-line"></div><div class="e-content article-entry" itemprop="articleBody"><h2 id="引言">
+<a class="header-anchor" href="#%e5%bc%95%e8%a8%80"></a>
+引言
+</h2><p>hello！欢迎来到咪猫魔法世界~ 🐾✨</p>
+<p>在 CTF 的 Crypto/Misc 里，<strong>哈希像“给数据按下的指纹印章”</strong>：你拿着印章（算法）一盖，谁来都能复现同一个指纹；而<strong>文件隐写</strong>更像“把小纸条塞进字节夹层里”——文件表面看着正常，里面却藏着另一份故事。
+这两类题的共同点是：<strong>不靠玄学，靠流程</strong>。你只要会“看懂它是什么、再决定怎么下手”，分数就会自己跑过来（O.o）✨</p>
+<hr>
+<h2 id="一关于哈希--加密--编码">
+<a class="header-anchor" href="#%e4%b8%80%e5%85%b3%e4%ba%8e%e5%93%88%e5%b8%8c--%e5%8a%a0%e5%af%86--%e7%bc%96%e7%a0%81"></a>
+一、关于哈希 / 加密 / 编码
+</h2><p>很多新手🐱栽的第一个坑，就是把这三者混成一锅粥（比如我曾经就在做ER图的时候写了这样一个词：“加密后的密文”，当时我们项目指导老师笑的嘴角就没压下来过555）。那么我们现在一起来理理这三者之间的关系，相信看完之后你会对三者之间的区别有一个更加清新的认识。</p>
+<table>
+  <thead>
+      <tr>
+          <th>对比维度</th>
+          <th>哈希（Hash）</th>
+          <th>加密（Encryption）</th>
+          <th>编码（Encoding）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>能不能还原</td>
+          <td><strong>理论上不可逆</strong>（只能撞/爆破/查表）</td>
+          <td><strong>可逆</strong>（有密钥就能解）</td>
+          <td><strong>可逆</strong>（公开规则就能解）</td>
+      </tr>
+      <tr>
+          <td>主要目的</td>
+          <td>完整性校验、唯一标识、指纹对比</td>
+          <td>保密通信、保护内容</td>
+          <td>适配传输/存储（显示、协议、字符集）</td>
+      </tr>
+      <tr>
+          <td>常见例子</td>
+          <td>MD5、SHA-1、SHA-256、CRC32</td>
+          <td>AES、RSA</td>
+          <td>Base64、URL Encode、UTF-8</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>咪猫口诀：<strong>哈希“变不回去”，加密“有钥匙回去”，编码“大家都能回去”。</strong> 🐾</p>
+</blockquote>
+<p>这里要补一层更“比赛友好”的理解：
+CTF 里说“破解哈希”，大多数时候其实不是从哈希值反推出原文（那是做梦），而是——<strong>你猜一堆可能的原文，把它们都盖一遍指纹，看看谁对上了</strong>。</p>
+<hr>
+<h2 id="二哈希到底强在哪里也脆在哪里">
+<a class="header-anchor" href="#%e4%ba%8c%e5%93%88%e5%b8%8c%e5%88%b0%e5%ba%95%e5%bc%ba%e5%9c%a8%e5%93%aa%e9%87%8c%e4%b9%9f%e8%84%86%e5%9c%a8%e5%93%aa%e9%87%8c"></a>
+二、哈希到底强在哪里（也脆在哪里）
+</h2><p>哈希函数的理想目标是：输入再长再乱，我都能稳定给你一个固定长度的“指纹”。而且这个指纹要尽量满足三件事（CTF 和现实都爱考）：</p>
+<ol>
+<li>
+<p><strong>固定长度</strong>：不管你喂它 1 个字符还是 1G 文件，输出长度都固定。</p>
+</li>
+<li>
+<p><strong>雪崩效应</strong>：输入哪怕只改一个字节，输出也会像翻桌一样完全不一样。</p>
+</li>
+<li>
+<p><strong>抗碰撞/抗预像（理想状态）</strong>：</p>
+<ul>
+<li><strong>碰撞</strong>：找两个不同输入，输出却相同（<code>A != B</code> 但 <code>H(A)=H(B)</code>）。</li>
+<li><strong>预像</strong>：给你一个哈希值，让你找到一个输入能产生它（给“指纹”找“手指”）。</li>
+</ul>
+</li>
+</ol>
+<p>现实是：算法有“年纪”和“命运”。MD5、SHA-1 都已经不再适合作为安全用途（尤其是防碰撞），但它们在 CTF 里依然很常见——因为题目想考的是<strong>你的识别与流程</strong>，不是真让你写论文。</p>
+<p>（SHA 系列的标准可以看 NIST 的 Secure Hash Standard：FIPS 180-4。 (<a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf?utm_source=chatgpt.com" title="Secure Hash Standard (SHS) - NIST">NIST出版物</a>)；MD5 的规范可以看 RFC 1321。 (<a href="https://www.rfc-editor.org/rfc/rfc1321?utm_source=chatgpt.com" title="RFC 1321: The MD5 Message-Digest Algorithm">RFC 编辑器</a>)）</p>
+<hr>
+<h2 id="三ctf-高频哈希算法">
+<a class="header-anchor" href="#%e4%b8%89ctf-%e9%ab%98%e9%a2%91%e5%93%88%e5%b8%8c%e7%ae%97%e6%b3%95"></a>
+三、CTF 高频哈希算法
+</h2><p>在 CTF 题目里最常见的还是这几位“老演员”：</p>
+<table>
+  <thead>
+      <tr>
+          <th>算法</th>
+          <th>输出长度</th>
+          <th>你在 CTF 里需要记住的气质</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>MD5</td>
+          <td>128 bit（<strong>32 位十六进制</strong>）</td>
+          <td>老牌常见、速度快、<strong>已不抗碰撞</strong>，所以题里经常用来爆破/查表</td>
+      </tr>
+      <tr>
+          <td>SHA-1</td>
+          <td>160 bit（<strong>40 位十六进制</strong>）</td>
+          <td>也偏老了，偶尔出现，题目常让你“识别 + 爆破”</td>
+      </tr>
+      <tr>
+          <td>SHA-256</td>
+          <td>256 bit（<strong>64 位十六进制</strong>）</td>
+          <td>现在的主流强者，CTF 里常见于进阶题或文件校验</td>
+      </tr>
+      <tr>
+          <td>CRC32</td>
+          <td>32 bit（<strong>8 位十六进制</strong>）</td>
+          <td>这是“校验和”路线，<strong>不是密码学安全哈希</strong>，但文件题里很爱用</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>咪猫小观察：
+很多时候你甚至不用工具，<strong>光看长度</strong>就能猜个七七八八：32/40/64/8 这四个长度，简直像题目在对你眨眼bulingbuling~👀</p>
+</blockquote>
+<hr>
+<h2 id="四哈希题怎么做才稳一条主线走到底">
+<a class="header-anchor" href="#%e5%9b%9b%e5%93%88%e5%b8%8c%e9%a2%98%e6%80%8e%e4%b9%88%e5%81%9a%e6%89%8d%e7%a8%b3%e4%b8%80%e6%9d%a1%e4%b8%bb%e7%ba%bf%e8%b5%b0%e5%88%b0%e5%ba%95"></a>
+四、哈希题怎么做才稳：一条主线走到底
+</h2><p>哈希题如果你总感觉“我会工具但不会做题”，那大概率是因为你少了这一条主线：</p>
+<blockquote>
+<p><strong>先确定算法 → 再确定输入到底是什么（文本？字节？文件？）→ 再决定用匹配/查表/爆破 → 最后做对比验证</strong></p>
+</blockquote>
+<p>这里的关键是第二步：<strong>“输入到底是什么”</strong>。
+很多题目不是难在算法，是难在它偷偷换了你的“喂法”：</p>
+<ul>
+<li>文本是 UTF-8 还是 GBK？</li>
+<li>有没有多一个换行符 <code>\n</code>？</li>
+<li>是字符串 <code>&quot;123456&quot;</code>，还是文件内容的字节流？</li>
+<li>十六进制字符串 <code>313233</code> 你是当“文本”喂进去，还是先转成字节 <code>0x31 0x32 0x33</code> 再喂？</li>
+</ul>
+<p>这些细节会让哈希值完全不同——雪崩效应说翻脸就翻脸。</p>
+<h3 id="一个练手的小例子">
+<a class="header-anchor" href="#%e4%b8%80%e4%b8%aa%e7%bb%83%e6%89%8b%e7%9a%84%e5%b0%8f%e4%be%8b%e5%ad%90"></a>
+一个练手的小例子
+</h3><ul>
+<li>明文 <code>123456</code> 的 MD5：<code>e10adc3949ba59abbe56e057f20f883e</code></li>
+<li>明文 <code>123456</code> 的 SHA-256：<code>8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92</code></li>
+</ul>
+<p>（MD5 输出 128 bit 的定义见 RFC 1321。 (<a href="https://www.rfc-editor.org/rfc/rfc1321?utm_source=chatgpt.com" title="RFC 1321: The MD5 Message-Digest Algorithm">RFC 编辑器</a>)；SHA-256 属于 FIPS 180-4 的 SHA-2 系列。 (<a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf?utm_source=chatgpt.com" title="Secure Hash Standard (SHS) - NIST">NIST出版物</a>)）</p>
+<hr>
+<h2 id="五三种常见题型其实都在匹配">
+<a class="header-anchor" href="#%e4%ba%94%e4%b8%89%e7%a7%8d%e5%b8%b8%e8%a7%81%e9%a2%98%e5%9e%8b%e5%85%b6%e5%ae%9e%e9%83%bd%e5%9c%a8%e5%8c%b9%e9%85%8d"></a>
+五、三种常见题型：其实都在“匹配”
+</h2><p>我尽量不把这里写成分叉树（其实是因为懒bushi），所以我把它们统一成了一句话：</p>
+<blockquote>
+<p><strong>题目给你一个“目标哈希”，你要做的是生产出“同款哈希”。</strong></p>
+</blockquote>
+<p>差别只在于“你要生产多少次”。</p>
+<h3 id="1送分型直接计算对比">
+<a class="header-anchor" href="#1%e9%80%81%e5%88%86%e5%9e%8b%e7%9b%b4%e6%8e%a5%e8%ae%a1%e7%ae%97%e5%af%b9%e6%af%94"></a>
+1）送分型：直接计算对比
+</h3><p>题目给明文、给文件、给一段数据，让你算 MD5/SHA-256 ——那就是“盖章”。
+CyberChef 里直接搜 <code>MD5</code>、<code>SHA2</code>（选择 SHA-256）、或者 <code>Checksum</code>（常含 CRC32 之类），把数据丢进去就行。</p>
+<h3 id="2高频型爆破字典匹配">
+<a class="header-anchor" href="#2%e9%ab%98%e9%a2%91%e5%9e%8b%e7%88%86%e7%a0%b4%e5%ad%97%e5%85%b8%e5%8c%b9%e9%85%8d"></a>
+2）高频型：爆破/字典匹配⭐
+</h3><p>题目只给哈希值，但暗示原文很“人类”——比如 4 位数字、生日、弱密码、常见单词。
+这时候的正确姿势不是硬刚宇宙字符集，而是缩小范围，像咪猫一样“抓住尾巴就不放”：</p>
+<ul>
+<li>如果提示“4 位数字”，那就锁定 <code>0000</code> 到 <code>9999</code></li>
+<li>如果提示“生日”，那就锁定日期格式（<code>YYYYMMDD</code>、<code>YYMMDD</code>）</li>
+<li>如果提示“弱口令”，那就直接上字典（rockyou 这类）</li>
+</ul>
+<p>CyberChef 也能做这种匹配思路：你可以用生成候选（例如范围、组合、拼接）→ 计算哈希 → 用查找/过滤去定位目标。工具怎么摆不重要，重要的是：<strong>候选空间要小、验证要快、结果要复核</strong>。</p>
+<h3 id="3结合隐写文件校验不一致">
+<a class="header-anchor" href="#3%e7%bb%93%e5%90%88%e9%9a%90%e5%86%99%e6%96%87%e4%bb%b6%e6%a0%a1%e9%aa%8c%e4%b8%8d%e4%b8%80%e8%87%b4"></a>
+3）结合隐写：文件校验不一致
+</h3><p>题目给你“文件 + 期望哈希”，让你验证是否一致。一旦不一致，我们就要立刻警觉了：</p>
+<p>要么文件被改过（最常见），要么你算哈希的方式不对（例如算了文本而不是算文件字节），要么题目让你找“被附加/被拼接/被嵌套”的内容。</p>
+<hr>
+<h2 id="六文件隐写解密之前先听文件说话">
+<a class="header-anchor" href="#%e5%85%ad%e6%96%87%e4%bb%b6%e9%9a%90%e5%86%99%e8%a7%a3%e5%af%86%e4%b9%8b%e5%89%8d%e5%85%88%e5%90%ac%e6%96%87%e4%bb%b6%e8%af%b4%e8%af%9d"></a>
+六、文件隐写：”解密“之前先听文件说话
+</h2><p>几乎大部分的 misc 隐写题里，最值钱的技能其实都只有一句：</p>
+<blockquote>
+<p><strong>先识别文件的真实身份，再谈怎么提取秘密。</strong></p>
+</blockquote>
+<p>文件是会“伪装”的：后缀名写着 <code>.jpg</code>，但它骨子里可能是 PNG；你以为它是图片，结果它肚子里塞了一个 ZIP；你以为到结尾就结束，结果 EOF 后面还有一段悄悄话。</p>
+<h3 id="1魔法识别看-magic-bytes文件签名">
+<a class="header-anchor" href="#1%e9%ad%94%e6%b3%95%e8%af%86%e5%88%ab%e7%9c%8b-magic-bytes%e6%96%87%e4%bb%b6%e7%ad%be%e5%90%8d"></a>
+1）“魔法识别”：看 Magic Bytes（文件签名）
+</h3><p>下面是几个最常见的需要我们熟悉的“开场白”：</p>
+<ul>
+<li>PNG 的文件署名是固定 8 字节：<code>89 50 4E 47 0D 0A 1A 0A</code>（W3C 的 PNG 规范里写得很清楚。 (<a href="https://www.w3.org/TR/png-3/?utm_source=chatgpt.com" title="Portable Network Graphics (PNG) Specification (Third Edition)">W3C</a>)）</li>
+<li>ZIP 常见的局部文件头开头是 <code>50 4B 03 04</code>（“PK”）</li>
+<li>GZIP 常见魔数是 <code>1F 8B</code>（写在 RFC 1952 里。 (<a href="https://datatracker.ietf.org/doc/html/rfc1952?utm_source=chatgpt.com" title="RFC 1952 - GZIP file format specification version 4.3 - IETF Datatracker">IETF Datatracker</a>)）</li>
+</ul>
+<p>所以当你在 Hex 里看到这些“签名”，就像看到角色露出了尾巴：<strong>哦，你其实是你。</strong></p>
+<h3 id="2魔法切片从数据流里挖出嵌套文件">
+<a class="header-anchor" href="#2%e9%ad%94%e6%b3%95%e5%88%87%e7%89%87%e4%bb%8e%e6%95%b0%e6%8d%ae%e6%b5%81%e9%87%8c%e6%8c%96%e5%87%ba%e5%b5%8c%e5%a5%97%e6%96%87%e4%bb%b6"></a>
+2）“魔法切片”：从数据流里挖出嵌套文件
+</h3><p>隐写最爱干的事之一，就是把一个文件“塞进另一个文件”。
+在 CyberChef 里，和这条思路最搭的组合通常是：</p>
+<ul>
+<li><code>View Hex</code> / <code>Strings</code>：先找线索（比如 <code>flag{</code>、<code>PK</code>、<code>IHDR</code>、<code>IEND</code>）</li>
+<li><code>Extract Files</code>：从数据里扫描并尝试提取嵌入文件（这个操作本身就是为“扫描/提取嵌套文件”设计的。 (<a href="https://deepwiki.com/gchq/CyberChef/4.2-file-analysis-operations?utm_source=chatgpt.com" title="File Analysis Operations | gchq/CyberChef | DeepWiki">DeepWiki</a>)）</li>
+<li><code>Magic</code>：如果你面对的是一团奇怪的编码/压缩混合物，让它先帮你猜可能的解法路线（CyberChef Wiki 对 Magic 的定位有说明。 (<a href="https://github.com/gchq/CyberChef/wiki/Automatic-detection-of-encoded-data-using-CyberChef-Magic?utm_source=chatgpt.com" title="Automatic detection of encoded data using CyberChef Magic">GitHub</a>)）</li>
+</ul>
+<p>在这里需要提醒大家一句：</p>
+<blockquote>
+<p>“提取失败”不代表没有东西，可能只是——嵌入文件不完整、被截断、或者被简单加扰了一下（比如异或、反转、移位）。这时候你要回到 Hex 里，再观察一次“结构有没有断”。</p>
+</blockquote>
+<h3 id="3结构感图片类隐写为什么容易藏东西">
+<a class="header-anchor" href="#3%e7%bb%93%e6%9e%84%e6%84%9f%e5%9b%be%e7%89%87%e7%b1%bb%e9%9a%90%e5%86%99%e4%b8%ba%e4%bb%80%e4%b9%88%e5%ae%b9%e6%98%93%e8%97%8f%e4%b8%9c%e8%a5%bf"></a>
+3）“结构感”：图片类隐写为什么容易藏东西
+</h3><p>以 PNG 为例，它不是“从头到尾一坨像素”，它是由一个个 chunk 拼起来的（IHDR、IDAT、IEND 等）。这种结构化格式，天然适合塞额外数据：
+你可能在 IEND 后面发现多余字节，也可能在某些 chunk 里发现异常内容。PNG 的整体结构在规范里有详细描述（W3C PNG Spec）。 (<a href="https://www.w3.org/TR/png-3/?utm_source=chatgpt.com" title="Portable Network Graphics (PNG) Specification (Third Edition)">W3C</a>)</p>
+<hr>
+<h2 id="七咪猫的三大避坑点">
+<a class="header-anchor" href="#%e4%b8%83%e5%92%aa%e7%8c%ab%e7%9a%84%e4%b8%89%e5%a4%a7%e9%81%bf%e5%9d%91%e7%82%b9"></a>
+七、咪猫的三大避坑点
+</h2><p><strong>坑 1：哈希“大小写”到底怎么回事？</strong></p>
+<p>哈希结果本质是“字节序列”，我们常看到的 <code>e10adc...</code> 只是把字节用十六进制打印出来。
+十六进制显示可以是大写也可以是小写，但它们表示同一串字节——所以<strong>对比时通常把十六进制字符串统一成同一种大小写即可</strong>。
+（注意：这说的是“十六进制展示形式”，不是说“输入不区分大小写”。输入当然区分！）</p>
+<p><strong>坑 2：文件后缀名不可信，Hex 才是身份证</strong></p>
+<p>看到 <code>.jpg</code> 别着急跳坑，先看文件签名。PNG 的签名固定到离谱（见上面的 8 字节）。 (<a href="https://www.w3.org/TR/png-3/?utm_source=chatgpt.com" title="Portable Network Graphics (PNG) Specification (Third Edition)">W3C</a>)</p>
+<p><strong>坑 3：爆破不是蛮力，是范围管理</strong></p>
+<p>应该知道，题目给我们的任何提示（位数、格式、字符集、主题），都应该立刻变成我们的“候选空间剪刀”。
+先剪小再跑，才是比赛里最省时间的魔法。</p>
+<hr>
+<h2 id="八总结">
+<a class="header-anchor" href="#%e5%85%ab%e6%80%bb%e7%bb%93"></a>
+八、总结：
+</h2><p><strong>哈希题：认算法 → 认输入（文本/字节/文件）→ 造候选 → 计算 → 匹配 → 复核。</strong></p>
+<p><strong>隐写题：看签名/结构 → 看 Hex/Strings 找线索 → 提取嵌套文件 → 必要时再做还原。</strong></p>
+<p>如果你愿意把这套流程练熟，哈希和隐写就会从“看起来神秘”变成“走起来顺手”啦~🐾✨</p>
+<p>over</p>
+</div>
+    <footer class="article-footer"><ul class="article-category-list"><li class="article-tag-list-item" data-aos="zoom-in">
+    <a
+      class="article-category-link"
+      href="/categories/ctf-crypto"
+      data-aos="zoom-in"
+      >ctf-crypto</a
+    >
+    </li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%93%88%e5%b8%8c%e7%ae%97%e6%b3%95"
+        rel="tag"
+        >哈希算法</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/md5"
+        rel="tag"
+        >MD5</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/sha256"
+        rel="tag"
+        >SHA256</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e6%96%87%e4%bb%b6%e9%9a%90%e5%86%99"
+        rel="tag"
+        >文件隐写</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/cyberchef"
+        rel="tag"
+        >CyberChef</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/ctf%e5%af%86%e7%a0%81%e5%ad%a6"
+        rel="tag"
+        >CTF密码学</a
+      >
+    </li></ul>
+</footer>
+  </div><nav
+    id="article-nav"
+    aria-label="Article navigation"
+    data-aos="fade-up"
+  ><div class="article-nav-link-wrap left"><img
+              data-src="https://d-sketon.top/img/_backwebp/bg1.webp"
+              data-sizes="auto"
+              alt="CyberChef：编码基础与可视化解密"
+              class="lazyload"
+            /><a
+          href="/post/%E7%BC%96%E7%A0%81%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%E8%A7%A3%E5%AF%86/"
+          aria-label="前一篇:CyberChef：编码基础与可视化解密"
+          title="前一篇:CyberChef：编码基础与可视化解密"
+        ></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">CyberChef：编码基础与可视化解密</h3>
+      </div><div class="article-nav-link-wrap right"><img
+              data-src="https://d-sketon.top/img/_backwebp/bg1.webp"
+              data-sizes="auto"
+              alt="信安数学基础学习与练习"
+              class="lazyload"
+            /><a
+          href="/post/%E4%BF%A1%E5%AE%89%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
+          aria-label="后一篇:信安数学基础学习与练习"
+          title="后一篇:信安数学基础学习与练习"
+        ></a>
+        <div class="article-nav-caption">后一篇</div>
+        <h3 class="article-nav-title">信安数学基础学习与练习</h3>
+      </div></nav></article></section>
+        </div><footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info"><div>
+      <span class="icon-copyright"></span>2020-2026<span class="footer-info-sep rotate"></span>sweet
+    </div><div>
+        基于&nbsp;<a
+          href="https://gohugo.io/"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Hugo</a
+        >&nbsp;Theme.<a
+          href="https://github.com/D-Sketon/hugo-theme-reimu"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Reimu</a
+        >
+      </div><div>
+        <span class="icon-brush"
+          >&nbsp;5.6k</span
+        >
+        &nbsp;|&nbsp;
+        <span class="icon-coffee">&nbsp;00:33</span>
+      </div><div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv"
+          >总访问量&nbsp;<span
+            id="busuanzi_value_site_pv"
+          ></span
+        ></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv"
+          >总访客量&nbsp;<span
+            id="busuanzi_value_site_uv"
+          ></span
+        ></span>
+      </div></div>
+</footer>
+<div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div><div id="mask" class="hide"></div>
+      </div><nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap"><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一关于哈希--加密--编码">一、关于哈希 / 加密 / 编码</a></li>
+    <li><a href="#二哈希到底强在哪里也脆在哪里">二、哈希到底强在哪里（也脆在哪里）</a></li>
+    <li><a href="#三ctf-高频哈希算法">三、CTF 高频哈希算法</a></li>
+    <li><a href="#四哈希题怎么做才稳一条主线走到底">四、哈希题怎么做才稳：一条主线走到底</a>
+      <ul>
+        <li><a href="#一个练手的小例子">一个练手的小例子</a></li>
+      </ul>
+    </li>
+    <li><a href="#五三种常见题型其实都在匹配">五、三种常见题型：其实都在“匹配”</a>
+      <ul>
+        <li><a href="#1送分型直接计算对比">1）送分型：直接计算对比</a></li>
+        <li><a href="#2高频型爆破字典匹配">2）高频型：爆破/字典匹配⭐</a></li>
+        <li><a href="#3结合隐写文件校验不一致">3）结合隐写：文件校验不一致</a></li>
+      </ul>
+    </li>
+    <li><a href="#六文件隐写解密之前先听文件说话">六、文件隐写：”解密“之前先听文件说话</a>
+      <ul>
+        <li><a href="#1魔法识别看-magic-bytes文件签名">1）“魔法识别”：看 Magic Bytes（文件签名）</a></li>
+        <li><a href="#2魔法切片从数据流里挖出嵌套文件">2）“魔法切片”：从数据流里挖出嵌套文件</a></li>
+        <li><a href="#3结构感图片类隐写为什么容易藏东西">3）“结构感”：图片类隐写为什么容易藏东西</a></li>
+      </ul>
+    </li>
+    <li><a href="#七咪猫的三大避坑点">七、咪猫的三大避坑点</a></li>
+    <li><a href="#八总结">八、总结：</a></li>
+  </ul>
+</nav>
+</div></div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div></div><div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div></nav>
+</div><meting-js
+        theme="var(--color-link)"
+        id="8648104018"server="netease"type="playlist"fixed="true">
+      </meting-js><script
+    src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"
+    
+    
+    
+    
+    integrity="sha384-3gT/vsepWkfz/ff7PpWNUeMzeWoH3cDhm/A8jM7ouoAK0/fP/9bcHHR5kHq2nf&#43;e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"
+    
+    
+    
+    
+    integrity="sha384-J08i8An/QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script><script src="/js/main.js"  ></script><script src="/js/aos.js"  ></script><script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", aosInit);
+    } else {
+      aosInit();
+    }
+  </script><script src="/js/pjax_main.js" data-pjax ></script><script>
+  var setupFirework = () => {
+    if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+      if (window.firework) {
+        const options = JSON.parse("{\"excludeelements\":[\"a\",\"button\"],\"particles\":[{\"colors\":[\"var(--red-1)\",\"var(--red-2)\",\"var(--red-3)\",\"var(--red-4)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"emit\"],\"number\":20,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.3,0.5],\"radius\":[16,32]}},{\"colors\":[\"var(--red-0)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"diffuse\"],\"number\":1,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.2,0.5],\"lineWidth\":6,\"radius\":20}}]}");
+        options.excludeElements = options.excludeelements;
+        delete options.excludeelements;
+        window.firework(options);
+      }
+    }
+  }
+</script><script
+    src="https://npm.webcache.cn/mouse-firework@0.2.0/dist/index.umd.js"
+    defer
+    
+    
+    onload="setupFirework()"
+    integrity="sha384-qi9WggRt19tv8Vc7pCHW3ulMNLwrn515zaLEWZjl1px07vz8&#43;pUoWX8n1rgq282T" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/theme-shokax-pjax@0.0.3/dist/index.umd.js"
+    
+    
+    
+    
+    integrity="sha384-xneY1WY8hOfUzswrE4CrYq35N4BdVcxqxwHPr9zawE/jMSCxD&#43;jAPU55x/jj3wlf" crossorigin="anonymous"></script><script src="/js/pjax.js"  ></script><script>
+  var setupLive2d = () => {
+    live2d.init('https:\/\/fastly.jsdelivr.net\/gh\/D-Sketon\/plugin-live2d\/', {themeTipsPath: ""});
+  }
+</script><script
+    src="https://fastly.jsdelivr.net/gh/D-Sketon/plugin-live2d/js/live2d-autoload.js"
+    
+    async
+    
+    onload="setupLive2d()"
+    ></script>
+
+<div id="lazy-script">
+  <div><script data-pjax>
+        window.REIMU_POST = {
+          author: "sweet",
+          title: "哈希算法与文件隐写基础",
+          url: "http:\/\/localhost:1335\/post\/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E4%B8%8E%E6%96%87%E4%BB%B6%E9%9A%90%E5%86%99%E5%9F%BA%E7%A1%80\/",
+          description: "\r引言\rhello！欢迎来到咪猫魔法世界~ 🐾✨\n在 CTF 的 Crypto\/Misc 里，哈希像“给数据按下的指纹印章”：你拿着印章（算法）一盖，谁来都能复现同一个指纹；而文件隐写更像“把小纸条塞进字节夹层里”——文件表面看着正常，里面却藏着另一份故事。 这两类题的共同点是：不靠玄学，靠流程。你只要会“看懂它是什么、再决定怎么下手”，分数就会自己跑过来（O.o）✨\n一、关于哈希 \/ 加密 \/ 编码\r很多新手🐱栽的第一个坑，就是把这三者混成一锅粥（比如我曾经就在做ER图的时候写了这样一个词：“加密后的密文”，当时我们项目指导老师笑的嘴角就没压下来过555）。那么我们现在一起来理理这三者之间的 …",
+          cover: "http:\/\/localhost:1335\/images\/banner.webp",
+        };
+      </script><script src="/js/insert_highlight.js" data-pjax ></script><script src="/js/tabs.js" data-pjax defer></script><script type="module" data-pjax>const PhotoSwipeLightbox = (await safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js", "sha384-DiL6M\/gG\u002bwmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF\/N6lrZi\/")).default;const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,pswpModule: () => safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8\u002boTJ7m3DfYEWX1fu1scuS4\u002bs")}).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-MWNUH0WmtsYGhn2cbH6ELRCbf9LG3QDqCC&#43;gqPB3IBNO35xjZK3Ejb6oONRpDbPg" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/contrib/auto-render.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv&#43;fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script data-pjax>
+          var renderMath = () => {
+            if (!window.renderMathInElement) return;
+            window.renderMathInElement(_$("article"), {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+              ],
+            });
+          };
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", renderMath, { once: true });
+          } else {
+            renderMath();
+          }
+        </script></div>
+</div><script
+    src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js"
+    
+    async
+    
+    
+    integrity="sha384-0M75wtSkhjIInv4coYlaJU83&#43;OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id&#43;S" crossorigin="anonymous"></script><script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  </script><script>
+  const reimuCopyright = String.raw`
+   ______     ______     __     __    __     __  __    
+  /\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+  \ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+   \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+    \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                    
+  `;
+  console.log(String.raw`%c ${reimuCopyright}`, "color: #ff5252;");
+  console.log(
+    "%c Theme.Reimu" + " %c https://github.com/D-Sketon/hugo-theme-reimu ",
+    "color: white; background: #ff5252; padding:5px 0;",
+    "padding:4px;border:1px solid #ff5252;",
+  );
+</script><script>
+    var setupAPlayer = () => {
+      if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+        if (window.matchMedia('(max-width: 959px)').matches) {
+          const meting = _$('meting-js');
+          if (meting) {
+            meting.setAttribute('fixed', 'true');
+            const aside = meting.parentNode?.parentNode;
+            if (aside?.tagName === 'ASIDE') {
+              meting.parentNode.removeChild(meting);
+              document.body.appendChild(meting);
+            }
+          }
+        }
+      }
+    };var meting_api = 'https:\/\/api.injahow.cn\/meting\/?server=:server\u0026type=:type\u0026id=:id';</script><script
+    src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js"
+    defer
+    
+    
+    onload="setupAPlayer()"
+    integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr&#43;h5UfruuRL/aORyw&#43;5&#43;HZoU6e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js"
+    defer
+    
+    
+    
+    integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8&#43;0maanw1S/IyB&#43;Y4JG&#43;ZDU7GpKE8" crossorigin="anonymous"></script></body>
+</html>

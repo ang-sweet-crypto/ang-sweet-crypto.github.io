@@ -1,0 +1,1249 @@
+<!doctype html>
+<html
+  lang="zh-CN" 
+  data-theme-mode="auto"
+  >
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1335&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/><title>
+  RSA基础与大数分解（含多种类型exp）🐾 | sweet
+</title>
+<meta name="description" content="提拉米苏亚米亚米"/><script>
+  window.siteConfig = JSON.parse("{\"anchor_icon\":null,\"base\":\"http://localhost:1335/\",\"clipboard\":{\"copyright\":{\"count\":50,\"enable\":false,\"license_type\":\"by-nc-sa\"},\"fail\":{\"en\":\"Copy failed (ﾟ⊿ﾟ)ﾂ\",\"ja\":\"コピー失敗 (ﾟ⊿ﾟ)ﾂ\",\"pt-br\":\"Falha ao copiar (ﾟ⊿ﾟ)ﾂ\",\"zh-cn\":\"复制失败 (ﾟ⊿ﾟ)ﾂ\",\"zh-tw\":\"複製失敗 (ﾟ⊿ﾟ)ﾂ\"},\"success\":{\"en\":\"Copy successfully (*^▽^*)\",\"ja\":\"コピー成功 (*^▽^*)\",\"pt-br\":\"Copiado com sucesso (*^▽^*)\",\"zh-cn\":\"复制成功 (*^▽^*)\",\"zh-tw\":\"複製成功 (*^▽^*)\"}},\"code_block\":{\"expand\":true},\"icon_font\":\"4552607_4k4bc36ef96\",\"outdate\":{\"daysago\":180,\"enable\":false,\"message\":{\"en\":\"This article was last updated on {time}. Please note that the content may no longer be applicable.\",\"ja\":\"この記事は最終更新日：{time}。記載内容が現在有効でない可能性がありますのでご注意ください。\",\"pt-br\":\"Este artigo foi atualizado pela última vez em {time}. Observe que o conteúdo pode não ser mais aplicável.\",\"zh-cn\":\"本文最后更新于 {time}，请注意文中内容可能已不适用。\",\"zh-tw\":\"本文最後更新於 {time}，請注意文中內容可能已不適用。\"}}}");
+  
+</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7cNoto%20Serif%20SC:400,400italic,700,700italic%7c&amp;display=swap"
+  media="print"
+  onload="this.media='all'"
+/>
+<link
+    rel="preload"
+    href="//at.alicdn.com/t/c/font_4552607_4k4bc36ef96.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin="anonymous"
+  /><link rel="stylesheet" href="/css/loader.css" /><meta property="og:type" content="website" />
+  <meta property="og:title" content="RSA基础与大数分解（含多种类型exp）🐾 | sweet" />
+  <meta
+    property="og:description"
+    content="提拉米苏亚米亚米"
+  />
+  <meta property="og:url" content="http://localhost:1335/post/rsa%E5%9F%BA%E7%A1%80%E9%A2%98%E8%A7%A3/" />
+  <meta
+    property="og:site_name"
+    content="SWEET&#39;S BLOG"
+  />
+  <meta
+    property="og:image"
+    content="/"
+  />
+  <meta property="article:author" content="sweet" />
+  <meta property="article:published_time" content="2025-12-21T14:00:00&#43;08:00" />
+  <meta property="article:modified_time" content="2025-12-21T14:00:00&#43;08:00" /><meta property="article:tag" content="RSA大数分解Pollard Rho欧拉定理模逆元CTF密码学共模攻击Wiener攻击RSA应用场景" /><meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="/" />
+<link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/main.css" /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css"
+    integrity="sha384-IfxC36XL/toUyJ939C73PcgMuRzAZuIzZxE38drsmO5p6jD7ei&#43;Zx/1oA/0l8ysE" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><link
+    rel="preload"
+    as="style"
+    href="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.css"
+    integrity="sha384-tTgKLjMYmJr94v8qu2PE5MUGSMbyN2xiH266JUB3gpm8vnnJywd1dWSOEfrFz&#43;YI" crossorigin="anonymous"
+    onload="this.onload=null;this.rel='stylesheet'"
+  /><script
+    src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"
+    
+    
+    
+    
+    integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/@reimujs/aos@0.1.2/dist/aos.css"
+    integrity="sha384-GMRP93c6Hkz9JVKGAuRR3nTS7M07RwPgTFenXiosjq2VbVgvdDNcz1g6Mkj8AONa" crossorigin="anonymous"/><link
+    rel="stylesheet"
+    href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css"
+    integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj&#43;vDDLIL&#43;xBGQU/voDBY5XE2lVh" crossorigin="anonymous"/></head>
+  <body><div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate"><svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+          M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg></div><div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script><div id="copy-tooltip"></div>
+<div id="lang-tooltip">
+本文章没有找到对应的语言版本
+</div>
+<div id="heatmap-tooltip"></div><div id="container">
+      <div id="wrap"><div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation"><a class="main-nav-link-wrap" href="/"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">首页</span>
+      </a><a class="main-nav-link-wrap" href="/archives"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">归档</span>
+      </a><a class="main-nav-link-wrap" href="/about"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">关于</span>
+      </a><a class="main-nav-link-wrap" href="/friend"><div class='main-nav-icon icon rotate'>&#xe62b;</div><span class="main-nav-link">友链</span>
+      </a><a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation"></nav></div>
+<header id="header" aria-label="Site header"><picture></picture><img  fetchpriority="high" src="/images/banner.webp" alt="RSA基础与大数分解（含多种类型exp）🐾"><div id="header-outer">
+    <div id="header-title"><span id="logo">
+            <h1 data-aos="slide-up">RSA基础与大数分解（含多种类型exp）🐾</h1>
+          </span><h2 id="subtitle-wrap" data-aos="slide-down"></h2></div>
+  </div>
+</header><div id="content"
+          aria-label="Page content"
+          class="sidebar-left"
+            ><aside id="sidebar" aria-label="Sidebar"><div class="sidebar-wrapper-container sticky"><div class="sidebar-wrapper">
+    <div
+      class="sidebar-wrap"
+      data-aos="fade-up"
+    ><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一rsa加密算法基础">一、RSA加密算法基础</a>
+      <ul>
+        <li><a href="#11-核心定义与安全基石">1.1 核心定义与安全基石</a></li>
+        <li><a href="#12-rsa-的核心流程">1.2 RSA 的核心流程</a></li>
+        <li><a href="#3-踩坑提醒">3. 踩坑提醒⭐</a></li>
+      </ul>
+    </li>
+    <li><a href="#二ctf中的rsa高频考点">二、CTF中的RSA高频考点</a>
+      <ul>
+        <li><a href="#21-基础解密已知pqec">2.1 基础解密（已知p/q/e/c）</a></li>
+        <li><a href="#22-大数分解pollard-rho算法工具辅助">2.2 大数分解（Pollard Rho算法+工具辅助）</a></li>
+        <li><a href="#23-低加密指数攻击e3">2.3 低加密指数攻击（e=3）</a></li>
+        <li><a href="#24-小指数广播攻击e3多组nc">2.4 小指数广播攻击（e=3+多组n,c）</a></li>
+        <li><a href="#25-共模攻击多用户共用n">2.5 共模攻击（多用户共用n）</a></li>
+        <li><a href="#26-wiener攻击私钥d过短">2.6 Wiener攻击（私钥d过短）</a></li>
+        <li><a href="#27-公因数攻击多组n共享因子">2.7 公因数攻击（多组n共享因子）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三rsa拓展知识">三、RSA拓展知识</a>
+      <ul>
+        <li><a href="#31-rsa变体">3.1 RSA变体</a></li>
+        <li><a href="#32-安全威胁与防护">3.2 安全威胁与防护</a></li>
+        <li><a href="#33-ctf真题案例参考">3.3 CTF真题案例参考</a></li>
+      </ul>
+    </li>
+    <li><a href="#-咪猫碎碎念">✨ 咪猫碎碎念</a></li>
+    <li><a href="#四总结">四、总结</a></li>
+  </ul>
+</nav>
+</div></div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div><div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div></div>
+  </div><div class="sidebar-widget"></div></div></aside>
+<section id="main" aria-label="Main content"><article
+  class="h-entry article"
+  itemscope
+  itemtype="https://schema.org/BlogPosting"
+>
+  <div
+    class="article-inner"
+    data-aos="fade-up"
+  >
+    <div class="article-meta"><div class="article-date">
+  <span
+    class="article-date-link icon-calendar"
+    data-aos="zoom-in"
+  >
+    <time datetime="2025-12-21 14:00:00 &#43;0800 CST" itemprop="datePublished"
+      >2025-12-21</time
+    >
+    <time style="display: none;" id="post-update-time"
+      >2025-12-21</time
+    >
+  </span></div>
+</div><div class="hr-line"></div><div class="e-content article-entry" itemprop="articleBody"><h2 id="引言">
+<a class="header-anchor" href="#%e5%bc%95%e8%a8%80"></a>
+引言
+</h2><p>hello！欢迎回到咪猫魔法世界~ 🐾✨</p>
+<p>前面啃完数论基础和CryptoHack入门题，这篇聚焦RSA核心——它是1977年由Ron Rivest、Adi Shamir和Leonard Adleman提出的非对称加密算法，本质是数论知识点（欧拉函数、模逆元、大质数判断）的拼接。另外我在这篇文章中还对 RSA安全基石、更多CTF攻击类型、实际应用场景和实战工具等进行了整合，让大家通过这一篇文章就能够大概了解多种 RSA 的“原理+实战+拓展”实际应用~</p>
+<hr>
+<h2 id="一rsa加密算法基础">
+<a class="header-anchor" href="#%e4%b8%80rsa%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95%e5%9f%ba%e7%a1%80"></a>
+一、RSA加密算法基础
+</h2><h3 id="11-核心定义与安全基石">
+<a class="header-anchor" href="#11-%e6%a0%b8%e5%bf%83%e5%ae%9a%e4%b9%89%e4%b8%8e%e5%ae%89%e5%85%a8%e5%9f%ba%e7%9f%b3"></a>
+1.1 核心定义与安全基石
+</h3><p>RSA是非对称加密算法的经典代表，加密和解密使用不同密钥，安全性完全建立在“大数分解难题”之上。</p>
+<ul>
+<li>正向计算容易：两个大质数p、q相乘得到n，操作简单高效；</li>
+<li>逆向推导极难：已知n，想分解出p和q，以当前经典计算能力需数百年甚至更久，这构成了RSA的安全防线。</li>
+</ul>
+<h3 id="12-rsa-的核心流程">
+<a class="header-anchor" href="#12-rsa-%e7%9a%84%e6%a0%b8%e5%bf%83%e6%b5%81%e7%a8%8b"></a>
+1.2 RSA 的核心流程
+</h3><h4 id="121-密钥生成">
+<a class="header-anchor" href="#121-%e5%af%86%e9%92%a5%e7%94%9f%e6%88%90"></a>
+1.2.1 密钥生成
+</h4><ol>
+<li>选两个不相等大质数p、q（CTF中常见1024/2048位，实际推荐2048位以上）；</li>
+<li>算模数$n = p \times q$（公钥/私钥共用核心模数）；</li>
+<li>算欧拉函数$\phi(n) = (p-1)(q-1)$（若n为多素数乘积，$\phi(n)$为各素数减1的乘积）；</li>
+<li>选公钥e：满足$1 < e < \phi(n)$且$\gcd(e,\phi(n))=1$，常用65537（费马素数），避免用3/17等小指数；</li>
+<li>算私钥d：d是e的模逆元，即$e \times d \equiv 1 \pmod{\phi(n)}$，可通过多种方法求解（如下文方法）。</li>
+</ol>
+<p>✅ 最终：公钥$(e,n)$公开（用于加密/验签），私钥$(d,n)$保密（用于解密/签名）。</p>
+<h4 id="122-加密解密">
+<a class="header-anchor" href="#122-%e5%8a%a0%e5%af%86%e8%a7%a3%e5%af%86"></a>
+1.2.2 加密&amp;解密
+</h4><ul>
+<li>加密（公钥）：$c = m^e \pmod{n}$（m为明文，需满足$m < n$，否则需分组或填充）；</li>
+<li>解密（私钥）：$m = c^d \pmod{n}$；</li>
+<li>原理支撑：欧拉定理（$\gcd(m,n)=1$时，$m^{\phi(n)} \equiv 1 \pmod{n}$），因$e \times d = k \times \phi(n) + 1$，故$m^{e \times d} \equiv m \pmod{n}$。</li>
+</ul>
+<h4 id="123-核心特性与应用场景">
+<a class="header-anchor" href="#123-%e6%a0%b8%e5%bf%83%e7%89%b9%e6%80%a7%e4%b8%8e%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af"></a>
+1.2.3 核心特性与应用场景
+</h4><ul>
+<li>非对称性：公钥加密只能私钥解密，私钥签名只能公钥验签，是应用核心；</li>
+<li>典型用途：
+<ol>
+<li>密钥分发：HTTPS/SSL中，浏览器用服务器公钥加密临时会话密钥，后续用对称加密通信；</li>
+<li>身份验证：SSH免密登录，本地私钥应答服务器公钥挑战；</li>
+<li>数字签名：软件发布者用私钥签名哈希值，用户用公钥验签，确保软件未篡改。</li>
+</ol>
+</li>
+</ul>
+<h4 id="124-模逆元的三种求解方法">
+<a class="header-anchor" href="#124-%e6%a8%a1%e9%80%86%e5%85%83%e7%9a%84%e4%b8%89%e7%a7%8d%e6%b1%82%e8%a7%a3%e6%96%b9%e6%b3%95"></a>
+1.2.4 模逆元的三种求解方法
+</h4><p>除了扩展欧几里得算法，模逆元还有两种常用求法，适配不同场景：</p>
+<ol>
+<li>扩展欧几里得算法（通用）：适用于任意互素的a和mod，时间复杂度$O(\log n)$，是RSA求逆元的主流方法（代码见下文）；</li>
+<li>费马小定理/欧拉定理（模为素数时）：若mod是素数，逆元$=\text{pow}(a, \text{mod}-2, \text{mod})$；若a与mod互素，逆元$=\text{pow}(a, \phi(\text{mod})-1, \text{mod})$；</li>
+<li>递推法（批量求逆元）：适用于mod为小素数且需多次调用，公式为$\text{inv}(i) = -(\text{mod}//i) \times \text{inv}(\text{mod}\%i) \pmod{\text{mod}}$。</li>
+</ol>
+<h3 id="3-踩坑提醒">
+<a class="header-anchor" href="#3-%e8%b8%a9%e5%9d%91%e6%8f%90%e9%86%92"></a>
+3. 踩坑提醒⭐
+</h3><ul>
+<li>❌ e与$\phi(n)$不互素：无逆元d，密钥生成失败；</li>
+<li>❌ 明文$m \ge n$：加密丢失信息，解密无法恢复；</li>
+<li>❌ 小指数e=3且无填充：易遭低指数攻击或广播攻击；</li>
+<li>❌ 密钥长度过短：1024位已不安全，推荐2048位及以上；</li>
+<li>❌ 多用户共用模数n：易遭共模攻击；</li>
+<li>❌ 私钥d过短：易被Wiener攻击破解。</li>
+</ul>
+<hr>
+<h2 id="二ctf中的rsa高频考点">
+<a class="header-anchor" href="#%e4%ba%8cctf%e4%b8%ad%e7%9a%84rsa%e9%ab%98%e9%a2%91%e8%80%83%e7%82%b9"></a>
+二、CTF中的RSA高频考点
+</h2><h3 id="21-基础解密已知pqec">
+<a class="header-anchor" href="#21-%e5%9f%ba%e7%a1%80%e8%a7%a3%e5%af%86%e5%b7%b2%e7%9f%a5pqec"></a>
+2.1 基础解密（已知p/q/e/c）
+</h3><p>核心是“套公式+求逆元”，支持三种逆元求解方式，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 扩展欧几里得求逆元（通用）</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">extended_gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">old_r</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span> <span class="n">old_s</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">r</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quotient</span> <span class="o">=</span> <span class="n">old_r</span> <span class="o">//</span> <span class="n">r</span>
+</span></span><span class="line"><span class="cl">        <span class="n">old_r</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">,</span> <span class="n">old_r</span> <span class="o">-</span> <span class="n">quotient</span> <span class="o">*</span> <span class="n">r</span>
+</span></span><span class="line"><span class="cl">        <span class="n">old_s</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="n">old_s</span> <span class="o">-</span> <span class="n">quotient</span> <span class="o">*</span> <span class="n">s</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">old_s</span> <span class="o">%</span> <span class="n">b</span> <span class="k">if</span> <span class="n">old_r</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 费马小定理求逆元（mod为素数）</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">fermat_inv</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">pow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mod</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># 不互素</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">pow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mod</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># RSA基础解密（支持两种逆元方法）</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rsa_decrypt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">inv_method</span><span class="o">=</span><span class="s2">&#34;extended_gcd&#34;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">n</span> <span class="o">=</span> <span class="n">p</span><span class="o">*</span><span class="n">q</span><span class="p">;</span> <span class="n">phi_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 选择逆元求解方法</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">inv_method</span> <span class="o">==</span> <span class="s2">&#34;extended_gcd&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">d</span> <span class="o">=</span> <span class="n">extended_gcd</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">phi_n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">inv_method</span> <span class="o">==</span> <span class="s2">&#34;fermat&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">d</span> <span class="o">=</span> <span class="n">fermat_inv</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">phi_n</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">phi_n</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;不支持的逆元方法&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;无逆元，解密失败&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">m</span><span class="p">)[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试示例（CTF简化真题）</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span> <span class="o">=</span> <span class="mi">857504083339712752489993810777</span>
+</span></span><span class="line"><span class="cl">    <span class="n">q</span> <span class="o">=</span> <span class="mi">1029224947942998075080348647219</span>
+</span></span><span class="line"><span class="cl">    <span class="n">e</span> <span class="o">=</span> <span class="mi">65537</span>
+</span></span><span class="line"><span class="cl">    <span class="n">c</span> <span class="o">=</span> <span class="mi">7760495942927948852192598062454345855440706357543439965601867349749879593207699599408158947159775199700901711500562398488466824912053019375328111429529899211</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">rsa_decrypt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-大数分解pollard-rho算法工具辅助">
+<a class="header-anchor" href="#22-%e5%a4%a7%e6%95%b0%e5%88%86%e8%a7%a3pollard-rho%e7%ae%97%e6%b3%95%e5%b7%a5%e5%85%b7%e8%be%85%e5%8a%a9"></a>
+2.2 大数分解（Pollard Rho算法+工具辅助）
+</h3><p>当未知p/q时，用Pollard Rho算法分解n，搭配米勒-拉宾素性测试，同时可借助工具提升效率：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">math</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 米勒-拉宾素性测试（判断大数是否为质数）</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">is_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">11</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="n">a</span><span class="p">:</span> <span class="k">return</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">        <span class="n">d</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="n">d</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">d</span><span class="o">//=</span><span class="mi">2</span><span class="p">;</span> <span class="n">s</span><span class="o">+=</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">x</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="k">break</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Pollard Rho分解大数</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">pollard_rho</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">n</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">n</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">f</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">d</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">gcd</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">d</span> <span class="k">if</span> <span class="n">d</span><span class="o">!=</span><span class="n">n</span> <span class="k">else</span> <span class="n">pollard_rho</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 分解n并解密</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rsa_factor_decrypt</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&#34;n是质数，无法分解&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span> <span class="o">=</span> <span class="n">pollard_rho</span><span class="p">(</span><span class="n">n</span><span class="p">);</span> <span class="n">q</span> <span class="o">=</span> <span class="n">n</span><span class="o">//</span><span class="n">p</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">rsa_decrypt</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试（1024位简化n）</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">n</span> <span class="o">=</span> <span class="mi">1357902468135790246813579024681357902468135790246813579024681357902468135790246813579024681357902468135790246813579024681357902468135790246813579024681357902468135790246813579024681357902468135790246813579024681357902468135790246813579024681357902468135790246813579024681357902468</span>
+</span></span><span class="line"><span class="cl">    <span class="n">e</span> <span class="o">=</span> <span class="mi">65537</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321987654321</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">rsa_factor_decrypt</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>工具辅助</strong>：</p>
+<ul>
+<li>在线分解：<a href="https://factordb.com">factordb</a>（快速分解中小规模n）；</li>
+<li>本地工具：<a href="https://github.com/bbuhrow/yafu">yafu</a>（Windows平台，支持批量分解大n，命令：yafu-x64 &ldquo;factor(@)&rdquo; -batchfile 1.txt）。</li>
+</ul>
+<h3 id="23-低加密指数攻击e3">
+<a class="header-anchor" href="#23-%e4%bd%8e%e5%8a%a0%e5%af%86%e6%8c%87%e6%95%b0%e6%94%bb%e5%87%bbe3"></a>
+2.3 低加密指数攻击（e=3）
+</h3><p>当e=3且n较大无法分解时，通过爆破k使$c - k \times n$为完全立方数，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">math</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">low_e_attack</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">candidate</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">n</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 开e次方（此处e=3）</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">e</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nb">pow</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="n">candidate</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">m</span><span class="p">)[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">1000000</span><span class="p">:</span>  <span class="c1"># 限制爆破次数</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s2">&#34;爆破失败，可能e不是3或k过大&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试（e=3场景）</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">e</span> <span class="o">=</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">    <span class="n">n</span> <span class="o">=</span> <span class="mi">123456789012345678901234567890</span>
+</span></span><span class="line"><span class="cl">    <span class="n">c</span> <span class="o">=</span> <span class="mi">987654321098765432109876543210</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">low_e_attack</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24-小指数广播攻击e3多组nc">
+<a class="header-anchor" href="#24-%e5%b0%8f%e6%8c%87%e6%95%b0%e5%b9%bf%e6%92%ad%e6%94%bb%e5%87%bbe3%e5%a4%9a%e7%bb%84nc"></a>
+2.4 小指数广播攻击（e=3+多组n,c）
+</h3><p>同一明文m用e=3加密到多个不同n，截获≥3组(n,c)后，用中国剩余定理重构$m^3$，再开方得m：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 中国剩余定理求解</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">crt</span><span class="p">(</span><span class="n">remainders</span><span class="p">,</span> <span class="n">mods</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">extended_gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">extended_gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">%</span><span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">g</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span><span class="o">//</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 计算所有模数的乘积</span>
+</span></span><span class="line"><span class="cl">    <span class="n">M</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="n">mods</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">mi</span><span class="p">,</span> <span class="n">ri</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mods</span><span class="p">,</span> <span class="n">remainders</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Mi</span> <span class="o">=</span> <span class="n">M</span> <span class="o">//</span> <span class="n">mi</span>
+</span></span><span class="line"><span class="cl">        <span class="n">g</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">extended_gcd</span><span class="p">(</span><span class="n">Mi</span><span class="p">,</span> <span class="n">mi</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># 模数不互素</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span> <span class="o">+</span> <span class="n">ri</span> <span class="o">*</span> <span class="n">xi</span> <span class="o">*</span> <span class="n">Mi</span><span class="p">)</span> <span class="o">%</span> <span class="n">M</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 小指数广播攻击（e=3）</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">broadcast_attack</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">nc_pairs</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nc_pairs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;需至少</span><span class="si">{}</span><span class="s2">组(n,c)&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nc_pairs</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">remainders</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">nc_pairs</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 用CRT求m^e mod (n1*n2*n3)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_e</span> <span class="o">=</span> <span class="n">crt</span><span class="p">(</span><span class="n">remainders</span><span class="p">,</span> <span class="n">mods</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">m_e</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;CRT求解失败&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 开e次方</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">m_e</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">e</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">pow</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="n">m_e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">m</span><span class="p">)[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s2">&#34;开方失败&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试（3组n,c）</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nc_pairs</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">c1</span><span class="p">),</span>  <span class="c1"># 实际使用时替换为真实n和c</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">c2</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="n">n3</span><span class="p">,</span> <span class="n">c3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">broadcast_attack</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">nc_pairs</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="25-共模攻击多用户共用n">
+<a class="header-anchor" href="#25-%e5%85%b1%e6%a8%a1%e6%94%bb%e5%87%bb%e5%a4%9a%e7%94%a8%e6%88%b7%e5%85%b1%e7%94%a8n"></a>
+2.5 共模攻击（多用户共用n）
+</h3><p>多个用户用相同n、不同e（e1与e2互素）加密同一m，截获(c1,e1)和(c2,e2)即可恢复m：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">common_mod_attack</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">c2</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 用扩展欧几里得找s1,s2使s1*e1 + s2*e2 = 1</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">extended_gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">extended_gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">%</span><span class="n">b</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">g</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span><span class="o">//</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">    <span class="n">g</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">extended_gcd</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;e1与e2不互素，无法攻击&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 计算m = (c1^s1 * c2^s2) mod n（处理负指数）</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">s1</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">s2</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span> <span class="o">%</span> <span class="n">n</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">m</span><span class="p">)[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试示例</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">n</span> <span class="o">=</span> <span class="mi">123456789012345678901234567890</span>
+</span></span><span class="line"><span class="cl">    <span class="n">e1</span> <span class="o">=</span> <span class="mi">65537</span><span class="p">;</span> <span class="n">c1</span> <span class="o">=</span> <span class="mi">987654321098765432109876543210</span>
+</span></span><span class="line"><span class="cl">    <span class="n">e2</span> <span class="o">=</span> <span class="mi">17</span><span class="p">;</span> <span class="n">c2</span> <span class="o">=</span> <span class="mi">135790246813579024681357902468</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">common_mod_attack</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="26-wiener攻击私钥d过短">
+<a class="header-anchor" href="#26-wiener%e6%94%bb%e5%87%bb%e7%a7%81%e9%92%a5d%e8%bf%87%e7%9f%ad"></a>
+2.6 Wiener攻击（私钥d过短）
+</h3><p>当$d < n^{1/4}$时，用连分数逼近求解d，可直接调用owiener库：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 先安装：pip install owiener（库地址：https://pypi.org/project/owiener/）</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">owiener</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">wiener_attack</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">d</span> <span class="o">=</span> <span class="n">owiener</span><span class="o">.</span><span class="n">attack</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;d过长，攻击失败&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">d</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试示例</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">e</span> <span class="o">=</span> <span class="mi">30749686305802061816334591167284030734478031427751495527922388099381921172620569310945418007467306454160014597828390709770861577479329793948103408489494025272834473555854835044153374978554414416305012267643957838998648651100705446875979573675767605387333733876537528353237076626094553367977134079292593746416875606876735717905892280664538346000950343671655257046364067221469807138232820446015769882472160551840052921930357988334306659120253114790638496480092361951536576427295789429197483597859657977832368912534761100269065509351345050758943674651053419982561094432258103614830448382949765459939698951824447818497599</span>
+</span></span><span class="line"><span class="cl">    <span class="n">n</span> <span class="o">=</span> <span class="mi">109966163992903243770643456296093759130737510333736483352345488643432614201030629970207047930115652268531222079508230987041869779760776072105738457123387124961036111210544028669181361694095594938869077306417325203381820822917059651429857093388618818437282624857927551285811542685269229705594166370426152128895901914709902037365652575730201897361139518816164746228733410283595236405985958414491372301878718635708605256444921222945267625853091126691358833453283744166617463257821375566155675868452032401961727814314481343467702299949407935602389342183536222842556906657001984320973035314726867840698884052182976760066141</span>
+</span></span><span class="line"><span class="cl">    <span class="n">d</span> <span class="o">=</span> <span class="n">wiener_attack</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;破解得到私钥d：</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="27-公因数攻击多组n共享因子">
+<a class="header-anchor" href="#27-%e5%85%ac%e5%9b%a0%e6%95%b0%e6%94%bb%e5%87%bb%e5%a4%9a%e7%bb%84n%e5%85%b1%e4%ba%ab%e5%9b%a0%e5%ad%90"></a>
+2.7 公因数攻击（多组n共享因子）
+</h3><p>当多组(n,c)共享同一素因子p时，用gcd求p，再分解n：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">common_factor_attack</span><span class="p">(</span><span class="n">ns</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 从多组n中找公因数</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span> <span class="o">=</span> <span class="n">ns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">p</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">gcd</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">p</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;无共享公因数&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 分解每组n</span>
+</span></span><span class="line"><span class="cl">    <span class="n">factors</span> <span class="o">=</span> <span class="p">[(</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="o">//</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ns</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">factors</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试（两组n共享p）</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ns</span> <span class="o">=</span> <span class="p">[</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">]</span>  <span class="c1"># 替换为真实n</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">common_factor_attack</span><span class="p">(</span><span class="n">ns</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="三rsa拓展知识">
+<a class="header-anchor" href="#%e4%b8%89rsa%e6%8b%93%e5%b1%95%e7%9f%a5%e8%af%86"></a>
+三、RSA拓展知识
+</h2><h3 id="31-rsa变体">
+<a class="header-anchor" href="#31-rsa%e5%8f%98%e4%bd%93"></a>
+3.1 RSA变体
+</h3><ul>
+<li>多素数RSA：n是三个及以上素数的乘积，效率更高，适用于资源受限场景；</li>
+<li>双模数RSA（DM-RSA）：用两个独立模数n1、n2加密，需结合CRT解密，抗侧信道攻击能力更强；</li>
+<li>CRT-RSA：解密时用中国剩余定理优化，先算$m1=c^d \pmod{p}$、$m2=c^d \pmod{q}$，再合并m，速度更快。</li>
+</ul>
+<h3 id="32-安全威胁与防护">
+<a class="header-anchor" href="#32-%e5%ae%89%e5%85%a8%e5%a8%81%e8%83%81%e4%b8%8e%e9%98%b2%e6%8a%a4"></a>
+3.2 安全威胁与防护
+</h3><ul>
+<li>量子计算威胁：<a href="https://en.wikipedia.org/wiki/Shor%27s_algorithm">Shor算法</a>可多项式时间分解大数，威胁RSA安全，未来需转向<a href="https://csrc.nist.gov/Projects/post-quantum-cryptography">后量子密码学（NIST）</a>；</li>
+<li>侧信道攻击：通过计时、功耗信息泄露密钥，可采用双模数RSA或随机化加密防护；</li>
+<li>填充机制：未填充的RSA易遭攻击，推荐使用<a href="https://datatracker.ietf.org/doc/html/rfc8017">PKCS#1 v1.5</a>或<a href="https://datatracker.ietf.org/doc/html/rfc8017#section-7.1">OAEP填充</a>。</li>
+</ul>
+<h3 id="33-ctf真题案例参考">
+<a class="header-anchor" href="#33-ctf%e7%9c%9f%e9%a2%98%e6%a1%88%e4%be%8b%e5%8f%82%e8%80%83"></a>
+3.3 CTF真题案例参考
+</h3><ul>
+<li><a href="https://buuoj.cn/challenges">BUUCTF (WUSTCTF2020) babyrsa</a>：n较小，直接用yafu分解p/q后解密；</li>
+<li><a href="https://www.nctf.cn/challenges">NCTF2019 babyRSA</a>：小指数广播攻击，截获3组(n,c)用CRT重构$m^3$；</li>
+<li>鹏城杯2025 babyrsa：高精度浮点数泄露私钥参数，反向推算d；</li>
+<li><a href="https://buuoj.cn/challenges">BJDCTF2020 rsa_output</a>：共模攻击，多组(e,c)共用n求解m。</li>
+</ul>
+<hr>
+<h2 id="-咪猫碎碎念">
+<a class="header-anchor" href="#-%e5%92%aa%e7%8c%ab%e7%a2%8e%e7%a2%8e%e5%bf%b5"></a>
+✨ 咪猫碎碎念
+</h2><blockquote>
+<p>RSA的核心逻辑比较简单——“数论做基础，大数分解保安全”；CTF题本质是“找参数漏洞+套算法模板”。后面补充的攻击类型和拓展知识都是实战中高频遇到的场景，结合工具和真题练习，很快就能上手~</p>
+</blockquote>
+<blockquote>
+<p>记住：RSA不算难，难的是遗漏参数漏洞和算法选型错误！</p>
+</blockquote>
+<h2 id="四总结">
+<a class="header-anchor" href="#%e5%9b%9b%e6%80%bb%e7%bb%93"></a>
+四、总结
+</h2><ol>
+<li>核心公式：$m^{e \times d} \equiv m \pmod{n}$，密钥生成的关键是 $e$ 与 $\phi(n)$ 互素、求逆元；</li>
+<li>分解工具：Pollard Rho算法（代码实现）、<a href="https://github.com/bbuhrow/yafu">yafu</a>（本地）、<a href="https://factordb.com">factordb</a>（在线）；</li>
+<li>攻击思路：低指数（e=3）、共模（同n多e）、Wiener（d过短）、广播（多n同e同m）、公因数（多n共享p/q）；</li>
+<li>安全要点：密钥长度≥2048位、用65537作e、加填充、避免共用模数；</li>
+<li>拓展方向：RSA变体、<a href="https://csrc.nist.gov/Projects/post-quantum-cryptography">后量子密码防护</a>、侧信道攻击应对。</li>
+</ol>
+<pre tabindex="0"><code></code></pre></div>
+    <footer class="article-footer"><ul class="article-category-list"><li class="article-tag-list-item" data-aos="zoom-in">
+    <a
+      class="article-category-link"
+      href="/categories/ctf-crypto"
+      data-aos="zoom-in"
+      >ctf-crypto</a
+    >
+    </li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/rsa"
+        rel="tag"
+        >RSA</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%a4%a7%e6%95%b0%e5%88%86%e8%a7%a3"
+        rel="tag"
+        >大数分解</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/pollard-rho"
+        rel="tag"
+        >Pollard Rho</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e6%ac%a7%e6%8b%89%e5%ae%9a%e7%90%86"
+        rel="tag"
+        >欧拉定理</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e6%a8%a1%e9%80%86%e5%85%83"
+        rel="tag"
+        >模逆元</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/ctf%e5%af%86%e7%a0%81%e5%ad%a6"
+        rel="tag"
+        >CTF密码学</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/%e5%85%b1%e6%a8%a1%e6%94%bb%e5%87%bb"
+        rel="tag"
+        >共模攻击</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/wiener%e6%94%bb%e5%87%bb"
+        rel="tag"
+        >Wiener攻击</a
+      >
+    </li><li class="article-tag-list-item" data-aos="zoom-in">
+      <a
+        class="article-tag-list-link"
+        href="/tags/rsa%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af"
+        rel="tag"
+        >RSA应用场景</a
+      >
+    </li></ul>
+</footer>
+  </div><nav
+    id="article-nav"
+    aria-label="Article navigation"
+    data-aos="fade-up"
+  ><div class="article-nav-link-wrap left"><img
+              data-src="https://d-sketon.top/img/_backwebp/bg1.webp"
+              data-sizes="auto"
+              alt="信安数学基础学习与练习"
+              class="lazyload"
+            /><a
+          href="/post/%E4%BF%A1%E5%AE%89%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"
+          aria-label="前一篇:信安数学基础学习与练习"
+          title="前一篇:信安数学基础学习与练习"
+        ></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">信安数学基础学习与练习</h3>
+      </div><div class="article-nav-link-wrap right"><img
+              data-src="https://d-sketon.top/img/_backwebp/bg1.webp"
+              data-sizes="auto"
+              alt="二次剩余与勒让德符号🐾"
+              class="lazyload"
+            /><a
+          href="/post/%E4%BA%8C%E6%AC%A1%E5%89%A9%E4%BD%99%E4%B8%8E%E5%8B%92%E8%AE%A9%E5%BE%B7%E7%AC%A6%E5%8F%B7/"
+          aria-label="后一篇:二次剩余与勒让德符号🐾"
+          title="后一篇:二次剩余与勒让德符号🐾"
+        ></a>
+        <div class="article-nav-caption">后一篇</div>
+        <h3 class="article-nav-title">二次剩余与勒让德符号🐾</h3>
+      </div></nav></article></section>
+        </div><footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info"><div>
+      <span class="icon-copyright"></span>2020-2026<span class="footer-info-sep rotate"></span>sweet
+    </div><div>
+        基于&nbsp;<a
+          href="https://gohugo.io/"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Hugo</a
+        >&nbsp;Theme.<a
+          href="https://github.com/D-Sketon/hugo-theme-reimu"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          >Reimu</a
+        >
+      </div><div>
+        <span class="icon-brush"
+          >&nbsp;5.6k</span
+        >
+        &nbsp;|&nbsp;
+        <span class="icon-coffee">&nbsp;00:33</span>
+      </div><div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv"
+          >总访问量&nbsp;<span
+            id="busuanzi_value_site_pv"
+          ></span
+        ></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv"
+          >总访客量&nbsp;<span
+            id="busuanzi_value_site_uv"
+          ></span
+        ></span>
+      </div></div>
+</footer>
+<div class="sidebar-top">
+            <div class="sidebar-top-taichi rotate"></div>
+            <div class="arrow-up"></div>
+          </div><div id="mask" class="hide"></div>
+      </div><nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap"><div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#一rsa加密算法基础">一、RSA加密算法基础</a>
+      <ul>
+        <li><a href="#11-核心定义与安全基石">1.1 核心定义与安全基石</a></li>
+        <li><a href="#12-rsa-的核心流程">1.2 RSA 的核心流程</a></li>
+        <li><a href="#3-踩坑提醒">3. 踩坑提醒⭐</a></li>
+      </ul>
+    </li>
+    <li><a href="#二ctf中的rsa高频考点">二、CTF中的RSA高频考点</a>
+      <ul>
+        <li><a href="#21-基础解密已知pqec">2.1 基础解密（已知p/q/e/c）</a></li>
+        <li><a href="#22-大数分解pollard-rho算法工具辅助">2.2 大数分解（Pollard Rho算法+工具辅助）</a></li>
+        <li><a href="#23-低加密指数攻击e3">2.3 低加密指数攻击（e=3）</a></li>
+        <li><a href="#24-小指数广播攻击e3多组nc">2.4 小指数广播攻击（e=3+多组n,c）</a></li>
+        <li><a href="#25-共模攻击多用户共用n">2.5 共模攻击（多用户共用n）</a></li>
+        <li><a href="#26-wiener攻击私钥d过短">2.6 Wiener攻击（私钥d过短）</a></li>
+        <li><a href="#27-公因数攻击多组n共享因子">2.7 公因数攻击（多组n共享因子）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三rsa拓展知识">三、RSA拓展知识</a>
+      <ul>
+        <li><a href="#31-rsa变体">3.1 RSA变体</a></li>
+        <li><a href="#32-安全威胁与防护">3.2 安全威胁与防护</a></li>
+        <li><a href="#33-ctf真题案例参考">3.3 CTF真题案例参考</a></li>
+      </ul>
+    </li>
+    <li><a href="#-咪猫碎碎念">✨ 咪猫碎碎念</a></li>
+    <li><a href="#四总结">四、总结</a></li>
+  </ul>
+</nav>
+</div></div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img
+    data-src="/avatar//avatar.webp"
+    data-sizes="auto"
+    alt="sweet"
+    class="lazyload"
+  />
+  <div class="sidebar-author-name">sweet</div>
+  <div class="sidebar-description">提拉米苏亚米亚米</div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div><div class="sidebar-state-number">10</div>
+  </div>
+  <a class="sidebar-state-category" href="/categories/" aria-label="sidebar-state-category-link">
+    <div>分类</div>
+    <div class="sidebar-state-number">
+      2
+    </div>
+  </a>
+  <a class="sidebar-state-tag" href="/tags/" aria-label="sidebar-state-tag-link">
+    <div>标签</div>
+    <div class="sidebar-state-number">62</div>
+  </a>
+</div>
+<div class="sidebar-social" ></div><div class="sidebar-menu"><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/"
+        aria-label="首页"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">首页</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/archives"
+        aria-label="归档"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">归档</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/about"
+        aria-label="关于"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">关于</div>
+    </div><div class="sidebar-menu-link-wrap">
+      <a
+        class="sidebar-menu-link-dummy"
+        href="/friend"
+        aria-label="友链"
+      ></a><div class='sidebar-menu-icon icon rotate'>&#xe62b;</div><div class="sidebar-menu-link">友链</div>
+    </div></div></div></div><div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div></nav>
+</div><meting-js
+        theme="var(--color-link)"
+        id="8648104018"server="netease"type="playlist"fixed="true">
+      </meting-js><script
+    src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"
+    
+    
+    
+    
+    integrity="sha384-3gT/vsepWkfz/ff7PpWNUeMzeWoH3cDhm/A8jM7ouoAK0/fP/9bcHHR5kHq2nf&#43;e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"
+    
+    
+    
+    
+    integrity="sha384-J08i8An/QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script><script src="/js/main.js"  ></script><script src="/js/aos.js"  ></script><script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", aosInit);
+    } else {
+      aosInit();
+    }
+  </script><script src="/js/pjax_main.js" data-pjax ></script><script>
+  var setupFirework = () => {
+    if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+      if (window.firework) {
+        const options = JSON.parse("{\"excludeelements\":[\"a\",\"button\"],\"particles\":[{\"colors\":[\"var(--red-1)\",\"var(--red-2)\",\"var(--red-3)\",\"var(--red-4)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"emit\"],\"number\":20,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.3,0.5],\"radius\":[16,32]}},{\"colors\":[\"var(--red-0)\"],\"duration\":[1200,1800],\"easing\":\"easeOutExpo\",\"move\":[\"diffuse\"],\"number\":1,\"shape\":\"circle\",\"shapeOptions\":{\"alpha\":[0.2,0.5],\"lineWidth\":6,\"radius\":20}}]}");
+        options.excludeElements = options.excludeelements;
+        delete options.excludeelements;
+        window.firework(options);
+      }
+    }
+  }
+</script><script
+    src="https://npm.webcache.cn/mouse-firework@0.2.0/dist/index.umd.js"
+    defer
+    
+    
+    onload="setupFirework()"
+    integrity="sha384-qi9WggRt19tv8Vc7pCHW3ulMNLwrn515zaLEWZjl1px07vz8&#43;pUoWX8n1rgq282T" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/theme-shokax-pjax@0.0.3/dist/index.umd.js"
+    
+    
+    
+    
+    integrity="sha384-xneY1WY8hOfUzswrE4CrYq35N4BdVcxqxwHPr9zawE/jMSCxD&#43;jAPU55x/jj3wlf" crossorigin="anonymous"></script><script src="/js/pjax.js"  ></script><script>
+  var setupLive2d = () => {
+    live2d.init('https:\/\/fastly.jsdelivr.net\/gh\/D-Sketon\/plugin-live2d\/', {themeTipsPath: ""});
+  }
+</script><script
+    src="https://fastly.jsdelivr.net/gh/D-Sketon/plugin-live2d/js/live2d-autoload.js"
+    
+    async
+    
+    onload="setupLive2d()"
+    ></script>
+
+<div id="lazy-script">
+  <div><script data-pjax>
+        window.REIMU_POST = {
+          author: "sweet",
+          title: "RSA基础与大数分解（含多种类型exp）🐾",
+          url: "http:\/\/localhost:1335\/post\/rsa%E5%9F%BA%E7%A1%80%E9%A2%98%E8%A7%A3\/",
+          description: "\r引言\rhello！欢迎回到咪猫魔法世界~ 🐾✨\n前面啃完数论基础和CryptoHack入门题，这篇聚焦RSA核心——它是1977年由Ron Rivest、Adi Shamir和Leonard Adleman提出的非对称加密算法，本质是数论知识点（欧拉函数、模逆元、大质数判断）的拼接。另外我在这篇文章中还对 RSA安全基石、更多CTF攻击类型、实际应用场景和实战工具等进行了整合，让大家通过这一篇文章就能够大概了解多种 RSA 的“原理\u002b实战\u002b拓展”实际应用~\n一、RSA加密算法基础\r1.1 核心定义与安全基石\rRSA是非对称加密算法的经典代表，加密和解密使用不同密钥，安全性完全建立在“大数分解 …",
+          cover: "http:\/\/localhost:1335\/images\/banner.webp",
+        };
+      </script><script src="/js/insert_highlight.js" data-pjax ></script><script src="/js/tabs.js" data-pjax defer></script><script type="module" data-pjax>const PhotoSwipeLightbox = (await safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js", "sha384-DiL6M\/gG\u002bwmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF\/N6lrZi\/")).default;const initPswp = (gallery, children) => {
+          if (_$$(`${gallery} ${children}`).length > 0) {
+            new PhotoSwipeLightbox({
+              gallery,
+              children,pswpModule: () => safeImport("https:\/\/npm.webcache.cn\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8\u002boTJ7m3DfYEWX1fu1scuS4\u002bs")}).init();
+          }
+        }
+        const pswp = () => {
+          initPswp('.article-entry', 'a.article-gallery-item');
+          initPswp('.article-gallery', 'a.article-gallery-item');
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/katex.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-MWNUH0WmtsYGhn2cbH6ELRCbf9LG3QDqCC&#43;gqPB3IBNO35xjZK3Ejb6oONRpDbPg" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/katex@0.16.24/dist/contrib/auto-render.min.js"
+    
+    
+    data-pjax
+    
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv&#43;fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script data-pjax>
+          var renderMath = () => {
+            if (!window.renderMathInElement) return;
+            window.renderMathInElement(_$("article"), {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+              ],
+            });
+          };
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", renderMath, { once: true });
+          } else {
+            renderMath();
+          }
+        </script></div>
+</div><script
+    src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js"
+    
+    async
+    
+    
+    integrity="sha384-0M75wtSkhjIInv4coYlaJU83&#43;OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id&#43;S" crossorigin="anonymous"></script><script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  </script><script>
+  const reimuCopyright = String.raw`
+   ______     ______     __     __    __     __  __    
+  /\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+  \ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+   \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+    \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                    
+  `;
+  console.log(String.raw`%c ${reimuCopyright}`, "color: #ff5252;");
+  console.log(
+    "%c Theme.Reimu" + " %c https://github.com/D-Sketon/hugo-theme-reimu ",
+    "color: white; background: #ff5252; padding:5px 0;",
+    "padding:4px;border:1px solid #ff5252;",
+  );
+</script><script>
+    var setupAPlayer = () => {
+      if (! false  || !window.matchMedia('(max-width: 768px)').matches) {
+        if (window.matchMedia('(max-width: 959px)').matches) {
+          const meting = _$('meting-js');
+          if (meting) {
+            meting.setAttribute('fixed', 'true');
+            const aside = meting.parentNode?.parentNode;
+            if (aside?.tagName === 'ASIDE') {
+              meting.parentNode.removeChild(meting);
+              document.body.appendChild(meting);
+            }
+          }
+        }
+      }
+    };var meting_api = 'https:\/\/api.injahow.cn\/meting\/?server=:server\u0026type=:type\u0026id=:id';</script><script
+    src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js"
+    defer
+    
+    
+    onload="setupAPlayer()"
+    integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr&#43;h5UfruuRL/aORyw&#43;5&#43;HZoU6e" crossorigin="anonymous"></script><script
+    src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js"
+    defer
+    
+    
+    
+    integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8&#43;0maanw1S/IyB&#43;Y4JG&#43;ZDU7GpKE8" crossorigin="anonymous"></script></body>
+</html>
